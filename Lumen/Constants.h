@@ -13,8 +13,6 @@
 #define STOP (@"Stop")
 #define START (@"Start")
 
-#define MAX_DISPLAYS (16)
-
 #define TICK_INTERVAL (0.5) // seconds
 
 #endif

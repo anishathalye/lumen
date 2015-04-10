@@ -94,14 +94,7 @@
 }
 
 - (CGImageRef)getScreenContents {
-    CGDirectDisplayID display[MAX_DISPLAYS];
-    CGDisplayCount numDisplays;
-    CGDisplayErr err = CGGetOnlineDisplayList(MAX_DISPLAYS, display, &numDisplays);
-    if (err != CGDisplayNoErr) {
-        NSLog(@"error getting displays");
-        return NULL;
-    }
-    CGImageRef imageRef = CGDisplayCreateImage(display[0]);
+    CGImageRef imageRef = CGDisplayCreateImage(kCGDirectMainDisplay);
     return imageRef;
 }
 
