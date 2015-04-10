@@ -1,0 +1,423 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F802B9E91AD81FB700FCFD65 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9E81AD81FB700FCFD65 /* AppDelegate.m */; };
+		F802B9EB1AD81FB700FCFD65 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9EA1AD81FB700FCFD65 /* main.m */; };
+		F802B9ED1AD81FB700FCFD65 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F802B9EC1AD81FB700FCFD65 /* Images.xcassets */; };
+		F802B9F01AD81FB700FCFD65 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */; };
+		F802B9FC1AD81FB700FCFD65 /* LumenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9FB1AD81FB700FCFD65 /* LumenTests.m */; };
+		F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F61AD8252D0098C5CC /* BrightnessController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F802B9F61AD81FB700FCFD65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F802B9DA1AD81FB700FCFD65 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F802B9E11AD81FB700FCFD65;
+			remoteInfo = Lumen;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F802B9E21AD81FB700FCFD65 /* Lumen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lumen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F802B9E61AD81FB700FCFD65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F802B9E71AD81FB700FCFD65 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F802B9E81AD81FB700FCFD65 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F802B9EA1AD81FB700FCFD65 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F802B9EC1AD81FB700FCFD65 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F802B9EF1AD81FB700FCFD65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		F802B9F51AD81FB700FCFD65 /* LumenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LumenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F802B9FA1AD81FB700FCFD65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F802B9FB1AD81FB700FCFD65 /* LumenTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LumenTests.m; sourceTree = "<group>"; };
+		F83E30F41AD823640098C5CC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		F83E30F51AD8252D0098C5CC /* BrightnessController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessController.h; sourceTree = "<group>"; };
+		F83E30F61AD8252D0098C5CC /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F802B9DF1AD81FB700FCFD65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F802B9F21AD81FB700FCFD65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F802B9D91AD81FB700FCFD65 = {
+			isa = PBXGroup;
+			children = (
+				F802B9E41AD81FB700FCFD65 /* Lumen */,
+				F802B9F81AD81FB700FCFD65 /* LumenTests */,
+				F802B9E31AD81FB700FCFD65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F802B9E31AD81FB700FCFD65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F802B9E21AD81FB700FCFD65 /* Lumen.app */,
+				F802B9F51AD81FB700FCFD65 /* LumenTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F802B9E41AD81FB700FCFD65 /* Lumen */ = {
+			isa = PBXGroup;
+			children = (
+				F802B9E71AD81FB700FCFD65 /* AppDelegate.h */,
+				F802B9E81AD81FB700FCFD65 /* AppDelegate.m */,
+				F83E30F51AD8252D0098C5CC /* BrightnessController.h */,
+				F83E30F61AD8252D0098C5CC /* BrightnessController.m */,
+				F83E30F41AD823640098C5CC /* Constants.h */,
+				F802B9EC1AD81FB700FCFD65 /* Images.xcassets */,
+				F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */,
+				F802B9E51AD81FB700FCFD65 /* Supporting Files */,
+			);
+			path = Lumen;
+			sourceTree = "<group>";
+		};
+		F802B9E51AD81FB700FCFD65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F802B9E61AD81FB700FCFD65 /* Info.plist */,
+				F802B9EA1AD81FB700FCFD65 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F802B9F81AD81FB700FCFD65 /* LumenTests */ = {
+			isa = PBXGroup;
+			children = (
+				F802B9FB1AD81FB700FCFD65 /* LumenTests.m */,
+				F802B9F91AD81FB700FCFD65 /* Supporting Files */,
+			);
+			path = LumenTests;
+			sourceTree = "<group>";
+		};
+		F802B9F91AD81FB700FCFD65 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F802B9FA1AD81FB700FCFD65 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F802B9E11AD81FB700FCFD65 /* Lumen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F802B9FF1AD81FB700FCFD65 /* Build configuration list for PBXNativeTarget "Lumen" */;
+			buildPhases = (
+				F802B9DE1AD81FB700FCFD65 /* Sources */,
+				F802B9DF1AD81FB700FCFD65 /* Frameworks */,
+				F802B9E01AD81FB700FCFD65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Lumen;
+			productName = Lumen;
+			productReference = F802B9E21AD81FB700FCFD65 /* Lumen.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F802B9F41AD81FB700FCFD65 /* LumenTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F802BA021AD81FB700FCFD65 /* Build configuration list for PBXNativeTarget "LumenTests" */;
+			buildPhases = (
+				F802B9F11AD81FB700FCFD65 /* Sources */,
+				F802B9F21AD81FB700FCFD65 /* Frameworks */,
+				F802B9F31AD81FB700FCFD65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F802B9F71AD81FB700FCFD65 /* PBXTargetDependency */,
+			);
+			name = LumenTests;
+			productName = LumenTests;
+			productReference = F802B9F51AD81FB700FCFD65 /* LumenTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F802B9DA1AD81FB700FCFD65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Anish Athalye";
+				TargetAttributes = {
+					F802B9E11AD81FB700FCFD65 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					F802B9F41AD81FB700FCFD65 = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = F802B9E11AD81FB700FCFD65;
+					};
+				};
+			};
+			buildConfigurationList = F802B9DD1AD81FB700FCFD65 /* Build configuration list for PBXProject "Lumen" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F802B9D91AD81FB700FCFD65;
+			productRefGroup = F802B9E31AD81FB700FCFD65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F802B9E11AD81FB700FCFD65 /* Lumen */,
+				F802B9F41AD81FB700FCFD65 /* LumenTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F802B9E01AD81FB700FCFD65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F802B9ED1AD81FB700FCFD65 /* Images.xcassets in Resources */,
+				F802B9F01AD81FB700FCFD65 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F802B9F31AD81FB700FCFD65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F802B9DE1AD81FB700FCFD65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F802B9EB1AD81FB700FCFD65 /* main.m in Sources */,
+				F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */,
+				F802B9E91AD81FB700FCFD65 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F802B9F11AD81FB700FCFD65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F802B9FC1AD81FB700FCFD65 /* LumenTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F802B9F71AD81FB700FCFD65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F802B9E11AD81FB700FCFD65 /* Lumen */;
+			targetProxy = F802B9F61AD81FB700FCFD65 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F802B9EF1AD81FB700FCFD65 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F802B9FD1AD81FB700FCFD65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F802B9FE1AD81FB700FCFD65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		F802BA001AD81FB700FCFD65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Lumen/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F802BA011AD81FB700FCFD65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Lumen/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		F802BA031AD81FB700FCFD65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LumenTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lumen.app/Contents/MacOS/Lumen";
+			};
+			name = Debug;
+		};
+		F802BA041AD81FB700FCFD65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LumenTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lumen.app/Contents/MacOS/Lumen";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F802B9DD1AD81FB700FCFD65 /* Build configuration list for PBXProject "Lumen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F802B9FD1AD81FB700FCFD65 /* Debug */,
+				F802B9FE1AD81FB700FCFD65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F802B9FF1AD81FB700FCFD65 /* Build configuration list for PBXNativeTarget "Lumen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F802BA001AD81FB700FCFD65 /* Debug */,
+				F802BA011AD81FB700FCFD65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F802BA021AD81FB700FCFD65 /* Build configuration list for PBXNativeTarget "LumenTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F802BA031AD81FB700FCFD65 /* Debug */,
+				F802BA041AD81FB700FCFD65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F802B9DA1AD81FB700FCFD65 /* Project object */;
+}
