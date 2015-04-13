@@ -40,8 +40,8 @@
 		F83E30F41AD823640098C5CC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		F83E30F51AD8252D0098C5CC /* BrightnessController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessController.h; sourceTree = "<group>"; };
 		F83E30F61AD8252D0098C5CC /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
-		F83E30F91AD836F10098C5CC /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = util.c; path = ../util.c; sourceTree = "<group>"; };
-		F83E30FA1AD836F10098C5CC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../util.h; sourceTree = "<group>"; };
+		F83E30F91AD836F10098C5CC /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
+		F83E30FA1AD836F10098C5CC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
