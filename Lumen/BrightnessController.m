@@ -17,9 +17,15 @@
 @property (nonatomic, strong) NSTimer *timer;
 
 - (void)tick:(NSTimer *)timer;
+
+// even though the screen gradually transitions between brightness levels,
+// getBrightness returns the level to which the brightness is set
 - (float)getBrightness;
+
 - (void)setBrightness:(float) level;
+
 - (CGImageRef)getScreenContents;
+
 - (double)computeBrightness:(CGImageRef) image;
 
 @end
@@ -48,12 +54,31 @@
 
 - (void)tick:(NSTimer *)timer {
     CGImageRef contents = [self getScreenContents];
-    if (contents) {
-        double brightness = [self computeBrightness:contents];
-        CFRelease(contents);
-        double computed = clip(linear_interpolate(20, 0.8, 95, 0.3, brightness), 0, 1);
-        [self setBrightness:computed];
+    if (!contents) {
+        return;
     }
+
+    double brightness = [self computeBrightness:contents];
+    CFRelease(contents);
+    double computed = clip(linear_interpolate(20, 0.8, 95, 0.3, brightness), 0, 1);
+    [self setBrightness:computed];
+
+    // control loop logic:
+    // get screen brightness, if error, return
+    //
+    // check if person has tweaked the brightness level from what the control loop has set it to
+    // if yes, then set a flag and abort (wait till this stabilizes, cause the user may keep playing
+    // with the brightness till it's good for them)
+    //
+    // ON DETECTING FINISHED MANUAL BRIGHTNESS CHANGE:
+    // - record screen contents lightness level and the corresponding brightness that the user likes
+    // - update the model
+    // - persist the model
+    //
+    // CONTROL LOOP:
+    // - get screen lightness level
+    // - run through model and set brightness
+    // - record setpoint so we can detect manual changes (by a significant margin, e.g. 0.01)
 }
 
 - (double)computeBrightness:(CGImageRef) image {
