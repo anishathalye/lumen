@@ -2,3 +2,5 @@
 
 * do auto calibration by reading how user changes brightness levels and
   doing some sort of interpolation
+
+* persist settings
