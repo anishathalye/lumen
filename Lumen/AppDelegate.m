@@ -41,7 +41,7 @@
 }
 
 - (IBAction)menuActionToggle:(id)sender {
-    if ([self.brightnessController isRunning]) {
+    if (self.brightnessController.isRunning) {
         [self.brightnessController stop];
         [self.toggle setTitle:START];
     } else {
