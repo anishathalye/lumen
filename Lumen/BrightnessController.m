@@ -13,8 +13,6 @@
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-#define CHANGE_NOTICE (0.01f)
-
 @interface BrightnessController ()
 
 @property (nonatomic, strong) NSTimer *timer;

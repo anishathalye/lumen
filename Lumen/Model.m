@@ -7,8 +7,7 @@
 //
 
 #import "Model.h"
-
-#define MIN_X_SPACING (0.1f)
+#import "Constants.h"
 
 @interface XYPoint : NSObject
 
