@@ -14,6 +14,7 @@
 		F802B9FC1AD81FB700FCFD65 /* LumenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9FB1AD81FB700FCFD65 /* LumenTests.m */; };
 		F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F61AD8252D0098C5CC /* BrightnessController.m */; };
 		F83E30FB1AD836F10098C5CC /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F91AD836F10098C5CC /* util.c */; };
+		F8833AE41D419803006FD2B0 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = F8833AE31D419803006FD2B0 /* Model.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,8 @@
 		F83E30F61AD8252D0098C5CC /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
 		F83E30F91AD836F10098C5CC /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		F83E30FA1AD836F10098C5CC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		F8833AE21D419803006FD2B0 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		F8833AE31D419803006FD2B0 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,8 @@
 				F802B9E81AD81FB700FCFD65 /* AppDelegate.m */,
 				F83E30F51AD8252D0098C5CC /* BrightnessController.h */,
 				F83E30F61AD8252D0098C5CC /* BrightnessController.m */,
+				F8833AE21D419803006FD2B0 /* Model.h */,
+				F8833AE31D419803006FD2B0 /* Model.m */,
 				F83E30F41AD823640098C5CC /* Constants.h */,
 				F83E30F91AD836F10098C5CC /* util.c */,
 				F83E30FA1AD836F10098C5CC /* util.h */,
@@ -226,6 +231,7 @@
 				F83E30FB1AD836F10098C5CC /* util.c in Sources */,
 				F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */,
 				F802B9E91AD81FB700FCFD65 /* AppDelegate.m in Sources */,
+				F8833AE41D419803006FD2B0 /* Model.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

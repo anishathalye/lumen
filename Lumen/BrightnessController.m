@@ -7,14 +7,19 @@
 //
 
 #import "BrightnessController.h"
+#import "Model.h"
 #import "Constants.h"
 #import "util.h"
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <ApplicationServices/ApplicationServices.h>
 
+#define CHANGE_NOTICE (0.01f)
+
 @interface BrightnessController ()
 
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) Model *model;
+@property float lastSet;
 
 - (void)tick:(NSTimer *)timer;
 
@@ -26,11 +31,20 @@
 
 - (CGImageRef)getScreenContents;
 
-- (double)computeBrightness:(CGImageRef) image;
+- (double)computeLightness:(CGImageRef) image;
 
 @end
 
 @implementation BrightnessController
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.model = [[Model alloc] init];
+        [self setBrightness:1];
+    }
+    return self;
+}
 
 - (BOOL)isRunning {
     return self.timer && [self.timer isValid];
@@ -53,35 +67,48 @@
 }
 
 - (void)tick:(NSTimer *)timer {
+    // get screen content lightness
     CGImageRef contents = [self getScreenContents];
     if (!contents) {
         return;
     }
-
-    double brightness = [self computeBrightness:contents];
+    double lightness = [self computeLightness:contents];
     CFRelease(contents);
-    double computed = clip(linear_interpolate(20, 0.8, 95, 0.3, brightness), 0, 1);
-    [self setBrightness:computed];
 
-    // control loop logic:
-    // get screen brightness, if error, return
-    //
-    // check if person has tweaked the brightness level from what the control loop has set it to
-    // if yes, then set a flag and abort (wait till this stabilizes, cause the user may keep playing
-    // with the brightness till it's good for them)
-    //
-    // ON DETECTING FINISHED MANUAL BRIGHTNESS CHANGE:
-    // - record screen contents lightness level and the corresponding brightness that the user likes
-    // - update the model
-    // - persist the model
-    //
-    // CONTROL LOOP:
-    // - get screen lightness level
-    // - run through model and set brightness
-    // - record setpoint so we can detect manual changes (by a significant margin, e.g. 0.01)
+
+    // check if backlight has been manually changed
+    static bool noticed = false;
+    static float lastNoticed = 0;
+    float setPoint = [self getBrightness];
+    if (noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE)
+    {
+        if (!noticed) {
+            NSLog(@"noticed!");
+            noticed = true;
+            lastNoticed = setPoint;
+            return; // wait till next tick to see if it's still changing
+        }
+        if (fabsf(setPoint - lastNoticed) > CHANGE_NOTICE)
+        {
+            lastNoticed = setPoint;
+            NSLog(@"brightness still changing");
+            return; // it's still changing
+        }
+        else
+        {
+            NSLog(@"observing... %f; %f", setPoint, lightness);
+            [self.model observeOutput:setPoint forInput:lightness];
+            noticed = false;
+            // don't return, fall through and evaluate model here
+        }
+    }
+
+    float brightness = [self.model predictFromInput:lightness];
+
+    [self setBrightness:brightness];
 }
 
-- (double)computeBrightness:(CGImageRef) image {
+- (double)computeLightness:(CGImageRef) image {
     CFDataRef dataRef = CGDataProviderCopyData(CGImageGetDataProvider(image));
     const unsigned char *data = CFDataGetBytePtr(dataRef);
 
@@ -141,6 +168,7 @@
             IOObjectRelease(service);
         }
     }
+    self.lastSet = [self getBrightness]; // not just storing `level` cause weird rounding stuff
 }
 
 @end

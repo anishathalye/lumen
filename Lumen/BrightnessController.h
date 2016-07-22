@@ -10,7 +10,7 @@
 
 @interface BrightnessController : NSObject
 
-@property (readonly) BOOL isRunning;
+@property (nonatomic, readonly) BOOL isRunning;
 
 - (void)start;
 - (void)stop;
