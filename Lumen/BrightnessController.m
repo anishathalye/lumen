@@ -39,7 +39,8 @@
     self = [super init];
     if (self) {
         self.model = [[Model alloc] init];
-        [self setBrightness:1];
+        self.lastSet = -1; // this causes tick to notice that the brightness has changed significantly
+                           // which causes it to create a new data point for the current screen
     }
     return self;
 }
