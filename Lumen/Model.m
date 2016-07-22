@@ -57,11 +57,9 @@
         float second = obj2.x;
         if (first < second) {
             return NSOrderedAscending;
-        }
-        else if (first > second) {
+        } else if (first > second) {
             return NSOrderedDescending;
-        }
-        else {
+        } else {
             return NSOrderedSame;
         }
     }];
@@ -74,8 +72,7 @@
         XYPoint *p = [self.points objectAtIndex:i];
         if (p.y <= prevy || (prevx - p.x) < MIN_X_SPACING) {
             [toDelete addIndex:i];
-        }
-        else {
+        } else {
             prevx = p.x;
             prevy = p.y;
         }
@@ -86,8 +83,7 @@
         XYPoint *p = [self.points objectAtIndex:i];
         if (p.y >= prevy || (p.x - prevx) < MIN_X_SPACING) {
             [toDelete addIndex:i];
-        }
-        else {
+        } else {
             prevx = p.x;
             prevy = p.y;
         }

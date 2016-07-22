@@ -78,20 +78,16 @@
     static bool noticed = false;
     static float lastNoticed = 0;
     float setPoint = [self getBrightness];
-    if (noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE)
-    {
+    if (noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE) {
         if (!noticed) {
             noticed = true;
             lastNoticed = setPoint;
             return; // wait till next tick to see if it's still changing
         }
-        if (fabsf(setPoint - lastNoticed) > CHANGE_NOTICE)
-        {
+        if (fabsf(setPoint - lastNoticed) > CHANGE_NOTICE) {
             lastNoticed = setPoint;
             return; // it's still changing
-        }
-        else
-        {
+        } else {
             [self.model observeOutput:setPoint forInput:lightness];
             noticed = false;
             // don't return, fall through and evaluate model here
