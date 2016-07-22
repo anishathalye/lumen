@@ -93,6 +93,18 @@
 }
 
 - (float)predictFromInput:(float)input {
+    // nearest neighbor
+    float bestdiff = FLT_MAX, besty = DEFAULT_BRIGHTNESS;
+    for (XYPoint *p in self.points) {
+        float diff = fabsf(p.x - input);
+        if (diff < bestdiff) {
+            bestdiff = diff;
+            besty = p.y;
+        }
+    }
+    return besty;
+
+    /*
     // find neighbors on left and right
     // and linear interpolate between them
 
@@ -117,6 +129,7 @@
     XYPoint *left = [self.points objectAtIndex:(index - 1)];
     XYPoint *right = [self.points objectAtIndex:index];
     return linear_interpolate(left.x, left.y, right.x, right.y, input);
+    */
 }
 
 @end

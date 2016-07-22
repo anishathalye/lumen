@@ -3,5 +3,3 @@
 * persist settings
 
 * add app icon
-
-* implement better interpolation (rather than nearest neighbor)
