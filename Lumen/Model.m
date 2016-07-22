@@ -66,12 +66,12 @@
     }];
     // get current inserted point
     NSInteger index = [self.points indexOfObject:point];
-    // remove points that are not monotonically decreasing / not spaced apart enough
+    // remove points that are not monotonically nonincreasing / not spaced apart enough
     NSMutableIndexSet *toDelete = [[NSMutableIndexSet alloc] init];
     float prevx = point.x, prevy = point.y;
     for (NSInteger i = index - 1; i >= 0; i--) {
         XYPoint *p = [self.points objectAtIndex:i];
-        if (p.y <= prevy || (prevx - p.x) < MIN_X_SPACING) {
+        if (p.y < prevy || (prevx - p.x) < MIN_X_SPACING) {
             [toDelete addIndex:i];
         } else {
             prevx = p.x;
@@ -82,7 +82,7 @@
     prevy = point.y; // reset these
     for (NSInteger i = index + 1; i < self.points.count; i++) {
         XYPoint *p = [self.points objectAtIndex:i];
-        if (p.y >= prevy || (p.x - prevx) < MIN_X_SPACING) {
+        if (p.y > prevy || (p.x - prevx) < MIN_X_SPACING) {
             [toDelete addIndex:i];
         } else {
             prevx = p.x;
