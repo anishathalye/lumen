@@ -83,7 +83,6 @@
     if (noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE)
     {
         if (!noticed) {
-            NSLog(@"noticed!");
             noticed = true;
             lastNoticed = setPoint;
             return; // wait till next tick to see if it's still changing
@@ -91,12 +90,10 @@
         if (fabsf(setPoint - lastNoticed) > CHANGE_NOTICE)
         {
             lastNoticed = setPoint;
-            NSLog(@"brightness still changing");
             return; // it's still changing
         }
         else
         {
-            NSLog(@"observing... %f; %f", setPoint, lightness);
             [self.model observeOutput:setPoint forInput:lightness];
             noticed = false;
             // don't return, fall through and evaluate model here

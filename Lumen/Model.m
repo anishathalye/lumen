@@ -107,7 +107,6 @@
             besty = p.y;
         }
     }
-    NSLog(@"%@ %f -> %f", self.points, input, besty);
     return besty;
 }
 
