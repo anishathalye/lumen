@@ -14,6 +14,7 @@
 		F802B9FC1AD81FB700FCFD65 /* LumenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9FB1AD81FB700FCFD65 /* LumenTests.m */; };
 		F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F61AD8252D0098C5CC /* BrightnessController.m */; };
 		F83E30FB1AD836F10098C5CC /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F91AD836F10098C5CC /* util.c */; };
+		F851E2CE1D4DACEE0016CC9C /* Lumen.iconset in Resources */ = {isa = PBXBuildFile; fileRef = F851E2CD1D4DACEE0016CC9C /* Lumen.iconset */; };
 		F8833AE41D419803006FD2B0 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = F8833AE31D419803006FD2B0 /* Model.m */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		F83E30F61AD8252D0098C5CC /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
 		F83E30F91AD836F10098C5CC /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		F83E30FA1AD836F10098C5CC /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		F851E2CD1D4DACEE0016CC9C /* Lumen.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = Lumen.iconset; sourceTree = "<group>"; };
 		F8833AE21D419803006FD2B0 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		F8833AE31D419803006FD2B0 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +99,7 @@
 				F83E30FA1AD836F10098C5CC /* util.h */,
 				F802B9EC1AD81FB700FCFD65 /* Images.xcassets */,
 				F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */,
+				F851E2CD1D4DACEE0016CC9C /* Lumen.iconset */,
 				F802B9E51AD81FB700FCFD65 /* Supporting Files */,
 			);
 			path = Lumen;
@@ -210,6 +213,7 @@
 			files = (
 				F802B9ED1AD81FB700FCFD65 /* Images.xcassets in Resources */,
 				F802B9F01AD81FB700FCFD65 /* MainMenu.xib in Resources */,
+				F851E2CE1D4DACEE0016CC9C /* Lumen.iconset in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
