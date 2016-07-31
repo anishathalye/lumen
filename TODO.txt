@@ -1,5 +1,0 @@
-* consider using only foreground window for brightness calculation
-
-* persist settings
-
-* add app icon
