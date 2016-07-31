@@ -1,10 +1,5 @@
-//
-//  util.c
-//  Lumen
-//
-//  Created by Anish Athalye on 4/10/15.
-//  Copyright (c) 2015 Anish Athalye. All rights reserved.
-//
+// Copyright (c) 2015-2016 Anish Athalye (me@anishathalye.com)
+// Released under GPLv3. See the included LICENSE.txt for details
 
 #include "util.h"
 #include <math.h>
