@@ -20,11 +20,19 @@ With Lumen, it's perfect.
 
 ## Download
 
-This project uses the GitHub Releases feature. **You can find pre-built
-binaries [here][releases].**
+The easiest way to install Lumen is to use [Homebrew Cask][cask]:
 
-As of now, releases are not signed with a developer key. To open unsigned
-applications, use [this method][opening-unsigned].
+```bash
+brew cask install lumen
+```
+
+Cask makes it easy to manage updates too.
+
+If you prefer, you can manually install the binary. You can find pre-built
+binaries [here][releases].
+
+**As of now, releases are not signed with a developer key. To open unsigned
+applications, use [this method][opening-unsigned].**
 
 You can also download and compile the code yourself, if you feel like it.
 
@@ -42,6 +50,7 @@ Copyright (c) 2015-2016 Anish Athalye. Released under GPLv3. See
 [LICENSE.txt][license] for details.
 
 [demo]: assets/demo.gif
+[cask]: https://caskroom.github.io/
 [opening-unsigned]: https://support.apple.com/kb/ph14369
 [releases]: https://github.com/anishathalye/lumen/releases
 [license]: LICENSE.txt
