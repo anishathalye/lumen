@@ -27,7 +27,7 @@ double srgb_to_lightness(double red, double green, double blue)
 
     y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
 
-    y = (y > 0.008856) ? pow(y, 1.0/3.0) : (7.787 * y) + 16/116;
+    y = (y > 0.008856) ? pow(y, 1.0/3.0) : (7.787 * y) + 16.0/116.0;
 
     double lab_l = (116 * y) - 16;
 
