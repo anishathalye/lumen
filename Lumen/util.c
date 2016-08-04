@@ -16,26 +16,20 @@ double clip(double value, double low, double high)
     return (value < low) ? (low) : (value > high ? high : value);
 }
 
-double srgb_to_brightness(double red, double green, double blue)
+double srgb_to_lightness(double red, double green, double blue)
 {
     double r = red / 255.0, g = green / 255.0, b = blue / 255.0;
-    double x, y, z;
+    double y;
 
     r = (r > 0.04045) ? pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
     g = (g > 0.04045) ? pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
     b = (b > 0.04045) ? pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
 
-    x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
     y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
-    z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
 
-    x = (x > 0.008856) ? pow(x, 1.0/3.0) : (7.787 * x) + 16/116;
     y = (y > 0.008856) ? pow(y, 1.0/3.0) : (7.787 * y) + 16/116;
-    z = (z > 0.008856) ? pow(z, 1.0/3.0) : (7.787 * z) + 16/116;
 
     double lab_l = (116 * y) - 16;
-    // double lab_a = 500 * (x - y);
-    // double lab_b = 200 * (y - z);
 
     return lab_l;
 }

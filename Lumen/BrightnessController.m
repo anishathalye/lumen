@@ -22,8 +22,6 @@
 
 - (void)setBrightness:(float) level;
 
-- (CGImageRef)getScreenContents;
-
 - (double)computeLightness:(CGImageRef) image;
 
 @end
@@ -62,7 +60,7 @@
 
 - (void)tick:(NSTimer *)timer {
     // get screen content lightness
-    CGImageRef contents = [self getScreenContents];
+    CGImageRef contents = CGDisplayCreateImage(kCGDirectMainDisplay);
     if (!contents) {
         return;
     }
@@ -102,29 +100,24 @@
     size_t width = CGImageGetWidth(image);
     size_t height = CGImageGetHeight(image);
 
-    double brightness = 0;
+    double lightness = 0;
     const unsigned int kSkip = 16; // uniformly sample screen pixels
-    // find RMS brightness value
+    // find RMS lightness value
     if (data) {
         for (size_t y = 0; y < height; y += kSkip) {
             for (size_t x = 0; x < width; x += kSkip) {
                 const unsigned char *dptr = &data[(width * y + x) * 4];
-                double l = srgb_to_brightness(dptr[0], dptr[1], dptr[2]);
+                double l = srgb_to_lightness(dptr[0], dptr[1], dptr[2]);
 
-                brightness += l * l;
+                lightness += l * l;
             }
         }
     }
-    brightness = sqrt(brightness / (width * height / (kSkip * kSkip)));
+    lightness = sqrt(lightness / (width * height / (kSkip * kSkip)));
 
     CFRelease(dataRef);
 
-    return brightness;
-}
-
-- (CGImageRef)getScreenContents {
-    CGImageRef imageRef = CGDisplayCreateImage(kCGDirectMainDisplay);
-    return imageRef;
+    return lightness;
 }
 
 - (float)getBrightness {
