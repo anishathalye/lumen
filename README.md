@@ -44,6 +44,17 @@ feature in System Preferences.**
 
 Feature requests, bug reports, and pull requests are all appreciated.
 
+## Related Projects
+
+* [bencevans/lumenaire](https://github.com/bencevans/lumenaire) - a **cross
+  platform** implementation of Lumen written in **Node.js**
+* [okayzed/autolux](https://github.com/okayzed/autolux) - a **Linux**
+  implementation of Lumen written in **Python**
+* [AlaaAlShammaa/Luminance](https://github.com/AlaaAlShammaa/Luminance) - a
+  **Windows** implementation of Lumen written in **Java**
+
+Note: I haven't personally audited the code from these projects.
+
 ## License
 
 Copyright (c) 2015-2016 Anish Athalye. Released under GPLv3. See
