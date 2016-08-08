@@ -48,7 +48,7 @@ Feature requests, bug reports, and pull requests are all appreciated.
 
 * [bencevans/lumenaire](https://github.com/bencevans/lumenaire) - a **cross
   platform** implementation of Lumen written in **Node.js**
-* [okayzed/autolux](https://github.com/okayzed/autolux) - a **Linux**
+* [autolume/autolux](https://github.com/autolume/autolux) - a **Linux**
   implementation of Lumen written in **Python**
 * [AlaaAlShammaa/Luminance](https://github.com/AlaaAlShammaa/Luminance) - a
   **Windows** implementation of Lumen written in **Java**
