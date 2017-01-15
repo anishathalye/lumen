@@ -48,6 +48,8 @@ Feature requests, bug reports, and pull requests are all appreciated.
 
 * [bencevans/lumenaire](https://github.com/bencevans/lumenaire) - a **cross
   platform** implementation of Lumen written in **Node.js**
+* [epilande/lux](https://github.com/epilande/lux) - a **cross platform**
+  implementation of Lumen written in **Node.js**
 * [meh/dux](https://github.com/meh/dux) - a **Linux** implementation of Lumen
   (with some extra features) written in **Rust**
 * [autolume/autolux](https://github.com/autolume/autolux) - a **Linux**
