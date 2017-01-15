@@ -61,7 +61,7 @@ Note: I haven't personally audited the code from these projects.
 
 ## License
 
-Copyright (c) 2015-2016 Anish Athalye. Released under GPLv3. See
+Copyright (c) 2015-2017 Anish Athalye. Released under GPLv3. See
 [LICENSE.txt][license] for details.
 
 [demo]: assets/demo.gif
