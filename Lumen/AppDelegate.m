@@ -4,6 +4,7 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "BrightnessController.h"
+#import "stats.h"
 
 @interface AppDelegate ()
 
@@ -11,6 +12,7 @@
 @property (strong, nonatomic) IBOutlet NSMenuItem *toggle;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) BrightnessController *brightnessController;
+@property (nonatomic, strong) NSTimer *statsTimer;
 
 @end
 
@@ -22,9 +24,20 @@
     [self.statusItem setTitle:MENU_SYMBOL];
     [self.statusItem setHighlightMode:YES];
 
-    self.brightnessController = [[BrightnessController alloc] init];
+    self.brightnessController = [BrightnessController new];
     [self.brightnessController start];
     [self.toggle setTitle:STOP];
+
+    send_stats(TELEMETRY_RETRIES);
+    self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
+                                                  target:self
+                                                selector:@selector(statsTick:)
+                                                userInfo:nil
+                                                 repeats:YES];
+}
+
+- (void)statsTick:(NSTimer *)timer {
+    send_stats(TELEMETRY_RETRIES);
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

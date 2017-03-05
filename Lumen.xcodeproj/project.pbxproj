@@ -12,6 +12,7 @@
 		F802B9ED1AD81FB700FCFD65 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F802B9EC1AD81FB700FCFD65 /* Images.xcassets */; };
 		F802B9F01AD81FB700FCFD65 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */; };
 		F802B9FC1AD81FB700FCFD65 /* LumenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F802B9FB1AD81FB700FCFD65 /* LumenTests.m */; };
+		F825A7A81E6B984300106611 /* stats.m in Sources */ = {isa = PBXBuildFile; fileRef = F825A7A71E6B984300106611 /* stats.m */; };
 		F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F61AD8252D0098C5CC /* BrightnessController.m */; };
 		F83E30FB1AD836F10098C5CC /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = F83E30F91AD836F10098C5CC /* util.c */; };
 		F851E2CE1D4DACEE0016CC9C /* Lumen.iconset in Resources */ = {isa = PBXBuildFile; fileRef = F851E2CD1D4DACEE0016CC9C /* Lumen.iconset */; };
@@ -39,6 +40,8 @@
 		F802B9F51AD81FB700FCFD65 /* LumenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LumenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F802B9FA1AD81FB700FCFD65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F802B9FB1AD81FB700FCFD65 /* LumenTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LumenTests.m; sourceTree = "<group>"; };
+		F825A7A71E6B984300106611 /* stats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stats.m; sourceTree = "<group>"; };
+		F825A7A91E6B984C00106611 /* stats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stats.h; sourceTree = "<group>"; };
 		F83E30F41AD823640098C5CC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		F83E30F51AD8252D0098C5CC /* BrightnessController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessController.h; sourceTree = "<group>"; };
 		F83E30F61AD8252D0098C5CC /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
@@ -90,6 +93,8 @@
 			children = (
 				F802B9E71AD81FB700FCFD65 /* AppDelegate.h */,
 				F802B9E81AD81FB700FCFD65 /* AppDelegate.m */,
+				F825A7A71E6B984300106611 /* stats.m */,
+				F825A7A91E6B984C00106611 /* stats.h */,
 				F83E30F51AD8252D0098C5CC /* BrightnessController.h */,
 				F83E30F61AD8252D0098C5CC /* BrightnessController.m */,
 				F8833AE21D419803006FD2B0 /* Model.h */,
@@ -175,7 +180,7 @@
 		F802B9DA1AD81FB700FCFD65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Anish Athalye";
 				TargetAttributes = {
 					F802B9E11AD81FB700FCFD65 = {
@@ -234,6 +239,7 @@
 				F802B9EB1AD81FB700FCFD65 /* main.m in Sources */,
 				F83E30FB1AD836F10098C5CC /* util.c in Sources */,
 				F83E30F71AD8252D0098C5CC /* BrightnessController.m in Sources */,
+				F825A7A81E6B984300106611 /* stats.m in Sources */,
 				F802B9E91AD81FB700FCFD65 /* AppDelegate.m in Sources */,
 				F8833AE41D419803006FD2B0 /* Model.m in Sources */,
 			);
@@ -282,8 +288,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -292,6 +300,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -324,8 +333,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -334,6 +345,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

@@ -38,7 +38,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.points = [[NSMutableArray alloc] init];
+        self.points = [NSMutableArray new];
     }
     return self;
 }
@@ -62,7 +62,7 @@
     // get current inserted point
     NSInteger index = [self.points indexOfObject:point];
     // remove points that are not monotonically nonincreasing / not spaced apart enough
-    NSMutableIndexSet *toDelete = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet *toDelete = [NSMutableIndexSet new];
     float prevx = point.x, prevy = point.y;
     for (NSInteger i = index - 1; i >= 0; i--) {
         XYPoint *p = [self.points objectAtIndex:i];
