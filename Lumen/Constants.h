@@ -15,6 +15,8 @@
 #define TELEMETRY_SALT (@"com.anishathalye.lumen")
 #define TELEMETRY_INTERVAL (1 * 24 * 60 * 60) // seconds
 
+#define DEFAULTS_CALIBRATION_POINTS (@"calibrationPoints")
+
 #define TICK_INTERVAL (0.5) // seconds
 #define MIN_X_SPACING (10.0) // absolute difference in L* coordinate
 #define CHANGE_NOTICE (0.01) // difference in screen brightness level

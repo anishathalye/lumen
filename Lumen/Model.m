@@ -4,6 +4,7 @@
 #import "Model.h"
 #import "Constants.h"
 #import "util.h"
+#import "NSArray+Functional.h"
 
 @interface XYPoint : NSObject
 
@@ -25,6 +26,26 @@
     return self;
 }
 
+- (NSDictionary *)asDictionary {
+    return @{@"x": [NSNumber numberWithFloat:self.x],
+             @"y": [NSNumber numberWithFloat:self.y]};
+}
+
+- (id)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self && [dictionary isKindOfClass:[NSDictionary class]]) {
+        NSNumber *x = [dictionary objectForKey:@"x"];
+        if ([x isKindOfClass:[NSNumber class]]) {
+            self.x = [x floatValue];
+        }
+        NSNumber *y = [dictionary objectForKey:@"y"];
+        if ([y isKindOfClass:[NSNumber class]]) {
+            self.y = [y floatValue];
+        }
+    }
+    return self;
+}
+
 @end
 
 @interface Model ()
@@ -39,6 +60,7 @@
     self = [super init];
     if (self) {
         self.points = [NSMutableArray new];
+        [self restoreDefaults];
     }
     return self;
 }
@@ -85,6 +107,7 @@
         }
     }
     [self.points removeObjectsAtIndexes:toDelete];
+    [self synchronizeDefaults];
 }
 
 - (float)predictFromInput:(float)input {
@@ -125,6 +148,24 @@
     XYPoint *right = [self.points objectAtIndex:index];
     return linear_interpolate(left.x, left.y, right.x, right.y, input);
     */
+}
+
+- (void)restoreDefaults {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *points = [[defaults arrayForKey:DEFAULTS_CALIBRATION_POINTS] map:^(NSDictionary *point) {
+        return [[XYPoint alloc] initWithDictionary:point];
+    }];
+    if (points) {
+        self.points = [points mutableCopy];
+    }
+}
+
+- (void)synchronizeDefaults {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *encoded = [self.points map:^(XYPoint *point) {
+        return [point asDictionary];
+    }];
+    [defaults setObject:encoded forKey:DEFAULTS_CALIBRATION_POINTS];
 }
 
 @end
