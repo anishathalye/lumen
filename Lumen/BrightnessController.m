@@ -59,6 +59,8 @@
 }
 
 - (void)tick:(NSTimer *)timer {
+    // TODO: guard for whitelisted apps here.
+    
     // get screen content lightness
     CGImageRef contents = CGDisplayCreateImage(kCGDirectMainDisplay);
     if (!contents) {
