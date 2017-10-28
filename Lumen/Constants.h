@@ -16,6 +16,9 @@
 #define TELEMETRY_INTERVAL (1 * 24 * 60 * 60) // seconds
 
 #define DEFAULTS_CALIBRATION_POINTS (@"calibrationPoints")
+#define DEFAULTS_IGNORE_LIST (@"ignoreList")
+
+#define NOTIFICATION_IGNORE_LIST_CHANGED (@"notification.ignoreListChanged")
 
 #define TICK_INTERVAL (0.5) // seconds
 #define MIN_X_SPACING (10.0) // absolute difference in L* coordinate

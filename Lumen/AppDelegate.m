@@ -5,6 +5,7 @@
 #import "Constants.h"
 #import "BrightnessController.h"
 #import "stats.h"
+#import "IgnoreListWindowController.h"
 
 @interface AppDelegate ()
 
@@ -13,6 +14,7 @@
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) BrightnessController *brightnessController;
 @property (nonatomic, strong) NSTimer *statsTimer;
+@property (strong, nonatomic) IgnoreListWindowController *ignoreListWC;
 
 @end
 
@@ -55,6 +57,19 @@
     } else {
         [self.brightnessController start];
         [self.toggle setTitle:STOP];
+    }
+}
+
+- (IBAction)menuActionIgnoreList:(id)sender {
+    [NSApp activateIgnoringOtherApps:YES];
+
+    if (self.ignoreListWC) {
+        // refocus if the ignore list window is still around.
+        [self.ignoreListWC.window orderFrontRegardless];
+    } else {
+        self.ignoreListWC = [[IgnoreListWindowController alloc] init];
+        [self.ignoreListWC showWindow:nil];
+        [self.ignoreListWC.window center];
     }
 }
 
