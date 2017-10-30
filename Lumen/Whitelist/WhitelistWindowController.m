@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
 
         case WhitelistSegmentActionRemove:
         default:
-            [self removeApplication];
+            [self removeSelectedApplication];
             break;
     }
 }
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
     }];
 }
 
-- (void)removeApplication {
+- (void)removeSelectedApplication {
     NSInteger selectedIndex = self.tableView.selectedRow;
     NSURL *applicationURL = self.dataSource[selectedIndex];
     
