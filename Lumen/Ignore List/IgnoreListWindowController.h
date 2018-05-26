@@ -1,5 +1,5 @@
 //
-//  WhitelistWindowController.h
+//  IgnoreListWindowController.h
 //  Lumen
 //
 //  Created by David Christiandy on 28/10/17.
@@ -8,6 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface WhitelistWindowController : NSWindowController
+@interface IgnoreListWindowController : NSWindowController
 
 @end

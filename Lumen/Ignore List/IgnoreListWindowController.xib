@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14111" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14111"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="WhitelistWindowController">
+        <customObject id="-2" userLabel="File's Owner" customClass="IgnoreListWindowController">
             <connections>
                 <outlet property="segmentedControl" destination="anD-u5-EUd" id="MO3-eq-ecT"/>
                 <outlet property="tableView" destination="1nb-eD-XFs" id="jJe-fP-WjU"/>
@@ -101,7 +101,7 @@
                         </textFieldCell>
                     </textField>
                     <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="anD-u5-EUd" userLabel="Add or remove button">
-                        <rect key="frame" x="17" y="18" width="70" height="24"/>
+                        <rect key="frame" x="17" y="18" width="71" height="24"/>
                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="t4a-CI-xZS">
                             <font key="font" metaFont="system"/>
                             <segments>

@@ -1,19 +1,19 @@
 //
-//  WhitelistWindowController.m
+//  IgnoreListWindowController.m
 //  Lumen
 //
 //  Created by David Christiandy on 28/10/17.
 //  Copyright © 2017 Anish Athalye. All rights reserved.
 //
 
-#import "WhitelistWindowController.h"
+#import "IgnoreListWindowController.h"
 
-typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
-    WhitelistSegmentActionAdd,
-    WhitelistSegmentActionRemove
+typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
+    IgnoreListSegmentActionAdd,
+    IgnoreListSegmentActionRemove
 };
 
-@interface WhitelistWindowController () <NSTableViewDelegate, NSTableViewDataSource>
+@interface IgnoreListWindowController () <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (weak) IBOutlet NSTableView *tableView;
 @property (strong, nonatomic) NSMutableArray<NSURL *> *dataSource;
@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
 
 @end
 
-@implementation WhitelistWindowController
+@implementation IgnoreListWindowController
 
 - (void)windowDidLoad {
     [super windowDidLoad];
@@ -43,22 +43,22 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
     self.dataSource = [applicationURLs filteredArrayUsingPredicate:appExtensionPredicate].mutableCopy;
     
     [self.tableView reloadData];
-    [self.segmentedControl setEnabled:NO forSegment:(NSInteger)WhitelistSegmentActionRemove];
+    [self.segmentedControl setEnabled:NO forSegment:(NSInteger)IgnoreListSegmentActionRemove];
 }
 
 #pragma mark - IBActions
 
 - (IBAction)tableAction:(id)sender {
-    [self.segmentedControl setEnabled:YES forSegment:WhitelistSegmentActionRemove];
+    [self.segmentedControl setEnabled:YES forSegment:IgnoreListSegmentActionRemove];
 }
 
 - (IBAction)didClickSegmentButton:(id)sender {
     switch (self.segmentedControl.selectedSegment) {
-        case WhitelistSegmentActionAdd:
+        case IgnoreListSegmentActionAdd:
             [self showAddApplicationPanel];
             break;
 
-        case WhitelistSegmentActionRemove:
+        case IgnoreListSegmentActionRemove:
         default:
             [self removeSelectedApplication];
             break;
@@ -68,6 +68,8 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
 #pragma mark - Private Methods
 
 - (void)showAddApplicationPanel {
+    // TODO: Can we restrict applications that are already included in the ignore list?
+    
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.prompt = @"Add";
     panel.allowedFileTypes = @[@"app"];

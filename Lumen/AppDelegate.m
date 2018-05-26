@@ -5,7 +5,7 @@
 #import "Constants.h"
 #import "BrightnessController.h"
 #import "stats.h"
-#import "WhitelistWindowController.h"
+#import "IgnoreListWindowController.h"
 
 @interface AppDelegate ()
 
@@ -65,7 +65,7 @@
 }
 
 - (IBAction)menuActionWhitelist:(id)sender {
-    WhitelistWindowController *whitelistWC = [[WhitelistWindowController alloc] initWithWindowNibName:@"WhitelistWindowController"];
+    IgnoreListWindowController *whitelistWC = [[IgnoreListWindowController alloc] initWithWindowNibName:@"IgnoreListWindowController"];
     [self showWindowController:whitelistWC];
 }
 
