@@ -38,6 +38,8 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
                                                                                   error:&error];
     
     NSPredicate *appExtensionPredicate = [NSPredicate predicateWithFormat:@"pathExtension = 'app'"];
+    
+    // TODO: Read data source from NSUserDefaults instead.
     self.dataSource = [applicationURLs filteredArrayUsingPredicate:appExtensionPredicate].mutableCopy;
     
     [self.tableView reloadData];
@@ -75,14 +77,18 @@ typedef NS_ENUM(NSInteger, WhitelistSegmentAction) {
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
         if (result == NSModalResponseOK) {
             NSArray *selectedURLs = panel.URLs;
-            NSLog(@"Apps: %@", selectedURLs); // TODO: Remove NSLogs later
+            NSLog(@"Apps: %@", selectedURLs); // TODO: Remove NSLog later
             
-            // TODO: Add the list to tableview.
+            // TODO: Add the list / URLs to tableview.
         }
+        
+        // TODO: What if the result is not OK?
     }];
 }
 
 - (void)removeSelectedApplication {
+    // TODO: What if there are multiple selected items?
+    
     NSInteger selectedIndex = self.tableView.selectedRow;
     NSURL *applicationURL = self.dataSource[selectedIndex];
     

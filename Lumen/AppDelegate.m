@@ -29,6 +29,7 @@
     // TODO: Testing purposes. Remove this later!
     [self menuActionWhitelist:self];
 
+    // TODO: Re-enable this telemetry code for production
 //    self.brightnessController = [BrightnessController new];
 //    [self.brightnessController start];
 //    [self.toggle setTitle:STOP];
@@ -71,6 +72,9 @@
 #pragma mark - Helper methods
 
 - (void)showWindowController:(nonnull NSWindowController *)windowController {
+    // TODO: When the menu is clicked from the taskbar, somehow woindow doesn't show up in front.
+    // TODO: Add a check to prevent windows from showing multiple times – Just focus on the already opened window.
+    
     self.windowController = windowController;
     [self.windowController showWindow:self];
     [self.windowController.window makeKeyAndOrderFront:self];
