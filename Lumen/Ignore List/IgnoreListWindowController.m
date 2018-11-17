@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     IgnoreListSegmentActionRemove
 };
 
-@interface IgnoreListWindowController () <NSTableViewDelegate, NSTableViewDataSource>
+@interface IgnoreListWindowController () <NSTableViewDelegate, NSTableViewDataSource, NSOpenSavePanelDelegate>
 
 @property (weak) IBOutlet NSTableView *tableView;
 @property (strong, nonatomic) NSMutableArray<NSURL *> *dataSource;
@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.window.title = @"Lumen";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.allowsMultipleSelection = YES;
     
     NSError *error;
     NSURL *appsDirURL = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationDirectory inDomains:NSLocalDomainMask].firstObject;
@@ -71,6 +72,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     // TODO: Can we restrict applications that are already included in the ignore list?
     
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.delegate = self;
     panel.prompt = @"Add";
     panel.allowedFileTypes = @[@"app"];
     panel.allowsMultipleSelection = YES;
@@ -82,6 +84,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
             NSLog(@"Apps: %@", selectedURLs); // TODO: Remove NSLog later
             
             // TODO: Add the list / URLs to tableview.
+            // TODO: Persist application URLs to NSUserDefaults.
         }
         
         // TODO: What if the result is not OK?
@@ -99,6 +102,18 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 
 - (void)removeApplicationWithURL:(NSURL *)url {
     // TODO: Remove application from dataSource.
+}
+
+#pragma mark - NSOpenSavePanelDelegate
+
+- (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url {
+    // Disable apps that have been added to the ignored list.
+    // Note that this might have slight performance issue if the list is long; but on average case this should be good enough.
+    if ([self.dataSource containsObject:url]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - NSTableViewDataSource
