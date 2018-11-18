@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self addIgnoredApplications:selectedURLs];
-                [self.tableView reloadData];
+                [self reloadTable];
             });
         }
         
