@@ -72,15 +72,13 @@
 }
 
 - (void)tick:(NSTimer *)timer {
-    // TODO: guard for ignored apps here.
+    // do nothing if the frontmost application is in ignored list.
     if (!self.updatingIgnoreList) {
         NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
         NSString *standardizedAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
         if ([self.ignoredApplications containsObject:standardizedAppURLString]) {
-            NSLog(@"Ignored: %@", standardizedAppURLString);
             return;
         }
-        NSLog(@"%@", standardizedAppURLString);
     }
     
     // get screen content lightness

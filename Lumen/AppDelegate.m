@@ -14,7 +14,7 @@
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) BrightnessController *brightnessController;
 @property (nonatomic, strong) NSTimer *statsTimer;
-@property (strong, nonatomic) NSWindowController *windowController;
+@property (strong, nonatomic) IgnoreListWindowController *ignoreListWC;
 
 @end
 
@@ -25,9 +25,6 @@
     [self.statusItem setMenu:self.statusMenu];
     [self.statusItem setTitle:MENU_SYMBOL];
     [self.statusItem setHighlightMode:YES];
-    
-    // TODO: Testing purposes. Remove this later!
-    [self menuActionWhitelist:self];
 
     self.brightnessController = [BrightnessController new];
     [self.brightnessController start];
@@ -64,21 +61,17 @@
     }
 }
 
-- (IBAction)menuActionWhitelist:(id)sender {
-    IgnoreListWindowController *whitelistWC = [[IgnoreListWindowController alloc] initWithWindowNibName:@"IgnoreListWindowController"];
-    [self showWindowController:whitelistWC];
-}
-
-#pragma mark - Helper methods
-
-- (void)showWindowController:(nonnull NSWindowController *)windowController {
-    // TODO: When the menu is clicked from the taskbar, somehow woindow doesn't show up in front.
-    // TODO: Add a check to prevent windows from showing multiple times – Just focus on the already opened window.
+- (IBAction)menuActionIgnoreList:(id)sender {
+    [NSApp activateIgnoringOtherApps:YES];
     
-    self.windowController = windowController;
-    [self.windowController showWindow:self];
-    [self.windowController.window makeKeyAndOrderFront:self];
+    if (self.ignoreListWC) {
+        // refocus if the ignore list window is still around.
+        [self.ignoreListWC.window orderFrontRegardless];
+    } else {
+        self.ignoreListWC = [[IgnoreListWindowController alloc] init];
+        [self.ignoreListWC showWindow:nil];
+        [self.ignoreListWC.window center];
+    }
 }
-
 
 @end

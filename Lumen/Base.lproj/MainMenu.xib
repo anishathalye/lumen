@@ -31,7 +31,7 @@
                 <menuItem title="Ignore List..." id="Sfj-QD-Mq3" userLabel="Whitelist">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="menuActionWhitelist:" target="Voe-Tx-rLC" id="Ch6-KE-aNn"/>
+                        <action selector="menuActionIgnoreList:" target="Voe-Tx-rLC" id="59a-Yc-Ohg"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="uRX-jK-9tO"/>

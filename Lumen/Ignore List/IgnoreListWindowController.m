@@ -27,9 +27,13 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 
 @implementation IgnoreListWindowController
 
+- (instancetype)init {
+    return [self initWithWindowNibName:self.className];
+}
+
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
+
     self.window.title = @"Lumen";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
