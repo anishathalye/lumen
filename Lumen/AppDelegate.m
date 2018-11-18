@@ -30,13 +30,12 @@
     [self.brightnessController start];
     [self.toggle setTitle:STOP];
 
-    // TODO: Re-enable this telemetry code for production
-//    send_stats(TELEMETRY_RETRIES);
-//    self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
-//                                                  target:self
-//                                                selector:@selector(statsTick:)
-//                                                userInfo:nil
-//                                                 repeats:YES];
+    send_stats(TELEMETRY_RETRIES);
+    self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
+                                                  target:self
+                                                selector:@selector(statsTick:)
+                                                userInfo:nil
+                                                 repeats:YES];
 }
 
 - (void)statsTick:(NSTimer *)timer {

@@ -103,15 +103,12 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
         if (result == NSModalResponseOK) {
             __block NSArray *selectedURLs = panel.URLs;
-            NSLog(@"Apps: %@", selectedURLs); // TODO: Remove NSLog later
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self addIgnoredApplications:selectedURLs];
                 [self reloadTable];
             });
         }
-        
-        // TODO: What if the result is not OK?
     }];
 }
 
@@ -119,7 +116,6 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     // Multiple selection is enabled, so the data needs to be removed
     NSIndexSet *selectedIndexes = self.tableView.selectedRowIndexes;
     if (selectedIndexes.count <= 0) {
-        // TODO: Probably show an alert that items must be selected first?
         return;
     }
     
