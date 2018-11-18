@@ -15,7 +15,8 @@
 @property (nonatomic, strong) Model *model;
 @property float lastSet;
 @property (nonatomic, assign, getter=isUpdatingIgnoreList) BOOL updatingIgnoreList;
-@property (nonatomic, strong) NSArray *ignoredApplications; // TODO: Is this the right way?
+@property (nonatomic, strong) NSArray *ignoredApplications;
+@property (nonatomic, strong) NSString *lastActiveAppURLString;
 
 - (void)tick:(NSTimer *)timer;
 
@@ -39,6 +40,7 @@
                            // which causes it to create a new data point for the current screen
         
         self.ignoredApplications = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULTS_IGNORE_LIST] ?: @[];
+        self.lastActiveAppURLString = @"";
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(ignoreListChanged:)
                                                      name:NOTIFICATION_IGNORE_LIST_CHANGED
@@ -74,9 +76,23 @@
 - (void)tick:(NSTimer *)timer {
     // do nothing if the frontmost application is in ignored list.
     if (!self.updatingIgnoreList) {
+        NSString *bundleURLString = [NSBundle mainBundle].bundleURL.absoluteString.stringByStandardizingPath;
         NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
-        NSString *standardizedAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
-        if ([self.ignoredApplications containsObject:standardizedAppURLString]) {
+        NSString *activeAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
+        
+        NSLog(@"active: %@ bundle: %@", activeAppURLString, bundleURLString);
+        if ([activeAppURLString isEqualToString:bundleURLString]) {
+            // for better experience, skip this method when Lumen is opened on top of an ignored application.
+            if ([self.ignoredApplications containsObject:self.lastActiveAppURLString]) {
+                return;
+            }
+        } else {
+            // store the last active application URL (except Lumen.app itself).
+            self.lastActiveAppURLString = activeAppURLString;
+        }
+        
+        // ignore if the current active app is listed in the ignored list.
+        if ([self.ignoredApplications containsObject:activeAppURLString]) {
             return;
         }
     }
