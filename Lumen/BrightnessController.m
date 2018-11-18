@@ -7,12 +7,15 @@
 #import "util.h"
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <ApplicationServices/ApplicationServices.h>
+#import <AppKit/AppKit.h>
 
 @interface BrightnessController ()
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) Model *model;
 @property float lastSet;
+@property (nonatomic, assign, getter=isUpdatingIgnoreList) BOOL updatingIgnoreList;
+@property (nonatomic, strong) NSArray *ignoredApplications; // TODO: Is this the right way?
 
 - (void)tick:(NSTimer *)timer;
 
@@ -34,8 +37,18 @@
         self.model = [Model new];
         self.lastSet = -1; // this causes tick to notice that the brightness has changed significantly
                            // which causes it to create a new data point for the current screen
+        
+        self.ignoredApplications = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULTS_IGNORE_LIST] ?: @[];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(ignoreListChanged:)
+                                                     name:NOTIFICATION_IGNORE_LIST_CHANGED
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)isRunning {
@@ -59,7 +72,16 @@
 }
 
 - (void)tick:(NSTimer *)timer {
-    // TODO: guard for whitelisted apps here.
+    // TODO: guard for ignored apps here.
+    if (!self.updatingIgnoreList) {
+        NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
+        NSString *standardizedAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
+        if ([self.ignoredApplications containsObject:standardizedAppURLString]) {
+            NSLog(@"Ignored: %@", standardizedAppURLString);
+            return;
+        }
+        NSLog(@"%@", standardizedAppURLString);
+    }
     
     // get screen content lightness
     CGImageRef contents = CGDisplayCreateImage(kCGDirectMainDisplay);
@@ -151,6 +173,19 @@
         }
     }
     self.lastSet = [self getBrightness]; // not just storing `level` cause weird rounding stuff
+}
+
+#pragma mark - NSNotification Responder
+
+- (void)ignoreListChanged:(NSNotification *)notification {
+    self.updatingIgnoreList = YES;
+    
+    NSArray<NSString *> *newIgnoreList = notification.userInfo[@"updatedList"];
+    if (newIgnoreList) {
+        self.ignoredApplications = newIgnoreList;
+    }
+    
+    self.updatingIgnoreList = NO;
 }
 
 @end

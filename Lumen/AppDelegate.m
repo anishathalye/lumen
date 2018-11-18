@@ -29,11 +29,11 @@
     // TODO: Testing purposes. Remove this later!
     [self menuActionWhitelist:self];
 
+    self.brightnessController = [BrightnessController new];
+    [self.brightnessController start];
+    [self.toggle setTitle:STOP];
+
     // TODO: Re-enable this telemetry code for production
-//    self.brightnessController = [BrightnessController new];
-//    [self.brightnessController start];
-//    [self.toggle setTitle:STOP];
-//
 //    send_stats(TELEMETRY_RETRIES);
 //    self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
 //                                                  target:self
