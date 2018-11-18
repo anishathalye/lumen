@@ -80,7 +80,6 @@
         NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
         NSString *activeAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
         
-        NSLog(@"active: %@ bundle: %@", activeAppURLString, bundleURLString);
         if ([activeAppURLString isEqualToString:bundleURLString]) {
             // for better experience, skip this method when Lumen is opened on top of an ignored application.
             if ([self.ignoredApplications containsObject:self.lastActiveAppURLString]) {
