@@ -151,7 +151,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     
     // validate index validity.
     // index sets are sorted ranges, so the last index of the indexSet has to be lower than the number of elements in dataSource.
-    if (self.dataSource.count > indexSet.lastIndex) {
+    if (indexSet.lastIndex >= self.dataSource.count) {
         return;
     }
     
