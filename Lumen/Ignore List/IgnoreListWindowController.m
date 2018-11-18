@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 @interface IgnoreListWindowController () <NSTableViewDelegate, NSTableViewDataSource, NSOpenSavePanelDelegate>
 
 @property (weak) IBOutlet NSTableView *tableView;
-@property (strong, nonatomic) NSMutableArray<NSURL *> *dataSource;
+@property (strong, nonatomic) NSMutableArray<NSString *> *dataSource;
 @property (weak) IBOutlet NSSegmentedControl *segmentedControl;
 @property (weak) IBOutlet NSView *emptyStateView;
 @property (strong, nonatomic) NSUserDefaults *userDefaults; // lazy var
@@ -36,8 +36,8 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.tableView.allowsMultipleSelection = YES;
     
     // fetch persisted app URLs from the user defaults, and validate them to remove renamed/uninstalled apps.
-    NSArray<NSURL *> *persistedAppURLs = [self.userDefaults arrayForKey:IGNORE_LIST_USER_DEFAULTS_KEY] ?: @[];
-    self.dataSource = [self getValidatedAppURLs:persistedAppURLs].mutableCopy;
+    NSArray<NSString *> *persistedAppURLStrings = [self.userDefaults arrayForKey:IGNORE_LIST_USER_DEFAULTS_KEY] ?: @[];
+    self.dataSource = [self getValidatedAppURLStrings:persistedAppURLStrings].mutableCopy;
     
     [self reloadTable];
     [self.segmentedControl setEnabled:NO forSegment:(NSInteger)IgnoreListSegmentActionRemove];
@@ -74,16 +74,18 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 
 #pragma mark - Private Methods
 
-- (NSArray<NSURL *> *)getValidatedAppURLs:(NSArray<NSURL *> *)appURLs {
-    NSMutableArray<NSURL *> *validatedURLs = appURLs.mutableCopy;
-    
-    for (NSURL *appURL in appURLs) {
+// remove apps that have been renamed and/or uninstalled based on the given app URL list.
+- (NSArray<NSString *> *)getValidatedAppURLStrings:(NSArray<NSString *> *)appURLStrings {
+    NSMutableArray<NSString *> *validatedURLStrings = appURLStrings.mutableCopy;
+
+    for (NSString *appURLString in appURLStrings) {
+        NSURL *appURL = [NSURL URLWithString:appURLString];
         if (![appURL checkResourceIsReachableAndReturnError:nil]) {
-            [validatedURLs removeObject:appURL];
+            [validatedURLStrings removeObject:appURLString];
         }
     }
     
-    return validatedURLs;
+    return validatedURLStrings;
 }
 
 - (void)showAddApplicationPanel {
@@ -128,18 +130,19 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     NSParameterAssert(appURLs);
     
     // sanitize application list
-    NSMutableArray *sanitizedAppURLs = appURLs.copy;
+    NSMutableArray<NSString *> *sanitizedAppURLStrings = [NSMutableArray new];
     for (NSURL *appURL in appURLs) {
-        if ([self.dataSource containsObject:appURL]) {
-            [sanitizedAppURLs removeObject:appURL];
+        NSString *appURLString = appURL.absoluteString;
+        if (![self.dataSource containsObject:appURLString]) {
+            [sanitizedAppURLStrings addObject:appURLString];
         }
     }
     
-    if (sanitizedAppURLs.count == 0) {
+    if (sanitizedAppURLStrings.count == 0) {
         return;
     }
     
-    [self.dataSource addObjectsFromArray:sanitizedAppURLs];
+    [self.dataSource addObjectsFromArray:sanitizedAppURLStrings];
     [self persistIgnoreListState];
 }
 
@@ -164,6 +167,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 
 - (void)reloadTable {
     self.emptyStateView.hidden = (self.dataSource.count > 0);
+    [self.window layoutIfNeeded];
     
     [self.tableView reloadData];
 }
@@ -173,7 +177,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 - (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url {
     // Disable apps that have been added to the ignored list.
     // Note that this might have slight performance issue if the list is long; but on average case this should be good enough.
-    if ([self.dataSource containsObject:url]) {
+    if ([self.dataSource containsObject:url.absoluteString]) {
         return NO;
     }
     
@@ -189,7 +193,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
         cell.identifier = @"cell";
     }
     
-    NSURL *url = self.dataSource[row];
+    NSURL *url = [NSURL URLWithString:self.dataSource[row]];
     NSImage *img = [[NSWorkspace sharedWorkspace] iconForFile:url.path];
     cell.imageView.image = img;
     cell.textField.stringValue = url.lastPathComponent;
