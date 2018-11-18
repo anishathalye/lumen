@@ -113,7 +113,6 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 }
 
 - (void)removeSelectedApplication {
-    // Multiple selection is enabled, so the data needs to be removed
     NSIndexSet *selectedIndexes = self.tableView.selectedRowIndexes;
     if (selectedIndexes.count <= 0) {
         return;
