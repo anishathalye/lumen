@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 - (void)showAddApplicationPanel {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.delegate = self;
-    panel.prompt = @"Add";
+    panel.prompt = @"Add to Ignore List";
     panel.allowedFileTypes = @[@"app"];
     panel.allowsMultipleSelection = YES;
     panel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationDirectory inDomains:NSLocalDomainMask].firstObject;
