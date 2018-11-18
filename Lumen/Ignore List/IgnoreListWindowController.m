@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.tableView.allowsMultipleSelection = YES;
     
     // fetch persisted app URLs from the user defaults, and validate them to remove renamed/uninstalled apps.
-    NSArray<NSString *> *persistedAppURLStrings = [self.userDefaults arrayForKey:IGNORE_LIST_USER_DEFAULTS_KEY] ?: @[];
+    NSArray<NSString *> *persistedAppURLStrings = [self.userDefaults arrayForKey:DEFAULTS_IGNORE_LIST] ?: @[];
     self.dataSource = [self getValidatedAppURLStrings:persistedAppURLStrings].mutableCopy;
     
     [self reloadTable];
@@ -161,8 +161,12 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 
 - (void)persistIgnoreListState {
     // persist the latest changes to user defaults.
-    [self.userDefaults setObject:self.dataSource.copy forKey:IGNORE_LIST_USER_DEFAULTS_KEY];
+    NSArray<NSString *> *dataSourceCopy = self.dataSource.copy;
+    [self.userDefaults setObject:dataSourceCopy forKey:DEFAULTS_IGNORE_LIST];
     [self.userDefaults synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IGNORE_LIST_CHANGED
+                                                        object:self
+                                                      userInfo:@{ @"updatedList": dataSourceCopy }];
 }
 
 - (void)reloadTable {
