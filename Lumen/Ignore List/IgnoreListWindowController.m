@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 @property (weak) IBOutlet NSTableView *tableView;
 @property (strong, nonatomic) NSMutableArray<NSURL *> *dataSource;
 @property (weak) IBOutlet NSSegmentedControl *segmentedControl;
+@property (weak) IBOutlet NSView *emptyStateView;
 @property (strong, nonatomic) NSUserDefaults *userDefaults; // lazy var
 
 @end
@@ -34,21 +35,11 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.tableView.dataSource = self;
     self.tableView.allowsMultipleSelection = YES;
     
-    // TODO: Read data source from NSUserDefaults instead.
+    // fetch persisted app URLs from the user defaults, and validate them to remove renamed/uninstalled apps.
+    NSArray<NSURL *> *persistedAppURLs = [self.userDefaults arrayForKey:IGNORE_LIST_USER_DEFAULTS_KEY] ?: @[];
+    self.dataSource = [self getValidatedAppURLs:persistedAppURLs].mutableCopy;
     
-    NSError *error;
-    NSURL *appsDirURL = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationDirectory inDomains:NSLocalDomainMask].firstObject;
-    NSArray *applicationURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:appsDirURL
-                                                             includingPropertiesForKeys:@[NSURLLocalizedNameKey]
-                                                                                options:(NSDirectoryEnumerationSkipsHiddenFiles|NSDirectoryEnumerationSkipsHiddenFiles)
-                                                                                  error:&error];
-    
-    NSPredicate *appExtensionPredicate = [NSPredicate predicateWithFormat:@"pathExtension = 'app'"];
-    
-    self.dataSource = [applicationURLs filteredArrayUsingPredicate:appExtensionPredicate].mutableCopy;
-    // TODO: Validate whether the app really does exist.
-    
-    [self.tableView reloadData];
+    [self reloadTable];
     [self.segmentedControl setEnabled:NO forSegment:(NSInteger)IgnoreListSegmentActionRemove];
 }
 
@@ -82,6 +73,18 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 }
 
 #pragma mark - Private Methods
+
+- (NSArray<NSURL *> *)getValidatedAppURLs:(NSArray<NSURL *> *)appURLs {
+    NSMutableArray<NSURL *> *validatedURLs = appURLs.mutableCopy;
+    
+    for (NSURL *appURL in appURLs) {
+        if (![appURL checkResourceIsReachableAndReturnError:nil]) {
+            [validatedURLs removeObject:appURL];
+        }
+    }
+    
+    return validatedURLs;
+}
 
 - (void)showAddApplicationPanel {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -118,7 +121,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     [self.tableView deselectAll:nil];
     
     [self removeApplicationsAtIndexes:selectedIndexes];
-    [self.tableView reloadData];
+    [self reloadTable];
 }
 
 - (void)addIgnoredApplications:(nonnull NSArray<NSURL *> *)appURLs {
@@ -154,21 +157,25 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 }
 
 - (void)persistIgnoreListState {
-    // TODO: Uncomment this part.
     // persist the latest changes to user defaults.
-    //    [self.userDefaults setObject:self.dataSource.copy forKey:IGNORE_LIST_USER_DEFAULTS_KEY];
-    //    [self.userDefaults synchronize];
+    [self.userDefaults setObject:self.dataSource.copy forKey:IGNORE_LIST_USER_DEFAULTS_KEY];
+    [self.userDefaults synchronize];
+}
+
+- (void)reloadTable {
+    self.emptyStateView.hidden = (self.dataSource.count > 0);
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - NSOpenSavePanelDelegate
 
 - (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url {
-    // TODO: Uncomment this part.
     // Disable apps that have been added to the ignored list.
     // Note that this might have slight performance issue if the list is long; but on average case this should be good enough.
-//    if ([self.dataSource containsObject:url]) {
-//        return NO;
-//    }
+    if ([self.dataSource containsObject:url]) {
+        return NO;
+    }
     
     return YES;
 }

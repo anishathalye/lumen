@@ -22,4 +22,7 @@
 #define CHANGE_NOTICE (0.01) // difference in screen brightness level
 #define DEFAULT_BRIGHTNESS (0.5)
 
+static NSString * const IGNORE_LIST_CHANGED_NOTIFICATION = @"notification.ignore-list.changed";
+static NSString * const IGNORE_LIST_USER_DEFAULTS_KEY = @"defaults.ignore-list";
+
 #endif

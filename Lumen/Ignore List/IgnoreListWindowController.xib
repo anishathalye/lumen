@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14111" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14111"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="IgnoreListWindowController">
             <connections>
+                <outlet property="emptyStateView" destination="5Ib-am-qvl" id="B9R-vG-OaA"/>
                 <outlet property="segmentedControl" destination="anD-u5-EUd" id="MO3-eq-ecT"/>
                 <outlet property="tableView" destination="1nb-eD-XFs" id="jJe-fP-WjU"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
@@ -15,7 +16,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="335"/>
@@ -37,7 +38,7 @@
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="" width="435" minWidth="40" maxWidth="1000" id="Thw-yA-wh2">
+                                        <tableColumn width="435" minWidth="40" maxWidth="1000" id="Thw-yA-wh2">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -83,15 +84,33 @@
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Xwd-ME-dvc">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Xwd-ME-dvc">
                             <rect key="frame" x="1" y="195" width="438" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Bhh-XQ-coo">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Bhh-XQ-coo">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="5Ib-am-qvl" userLabel="Empty State View">
+                        <rect key="frame" x="20" y="45" width="440" height="241"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LNQ-wt-xSb">
+                                <rect key="frame" x="6" y="222" width="428" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Add applications by clicking on the + button" id="CO2-oT-n0j">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="LNQ-wt-xSb" firstAttribute="top" secondItem="5Ib-am-qvl" secondAttribute="top" constant="2" id="BMu-Tg-S4b"/>
+                            <constraint firstAttribute="trailing" secondItem="LNQ-wt-xSb" secondAttribute="trailing" constant="8" id="l8X-CN-og0"/>
+                            <constraint firstItem="LNQ-wt-xSb" firstAttribute="leading" secondItem="5Ib-am-qvl" secondAttribute="leading" constant="8" id="tOy-vO-PYh"/>
+                        </constraints>
+                    </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T6y-kq-Rjm" userLabel="Description label">
                         <rect key="frame" x="18" y="298" width="444" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Lumen will ignore applications listed below." id="Faj-rZ-acn">
@@ -117,9 +136,13 @@
                 <constraints>
                     <constraint firstItem="7HU-yB-e29" firstAttribute="leading" secondItem="T6y-kq-Rjm" secondAttribute="leading" id="1Ud-vg-ul3"/>
                     <constraint firstItem="anD-u5-EUd" firstAttribute="leading" secondItem="1nb-eD-XFs" secondAttribute="leading" constant="-2" id="8g8-uK-HTq"/>
+                    <constraint firstItem="5Ib-am-qvl" firstAttribute="trailing" secondItem="7HU-yB-e29" secondAttribute="trailing" id="91h-xT-taS"/>
                     <constraint firstItem="T6y-kq-Rjm" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" id="COK-ZD-Cdt"/>
+                    <constraint firstItem="5Ib-am-qvl" firstAttribute="top" secondItem="7HU-yB-e29" secondAttribute="top" id="Ceb-Ro-zZq"/>
                     <constraint firstItem="T6y-kq-Rjm" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="I68-uf-tdT"/>
+                    <constraint firstItem="5Ib-am-qvl" firstAttribute="height" secondItem="7HU-yB-e29" secondAttribute="height" id="JSY-J4-Cyr"/>
                     <constraint firstAttribute="bottom" secondItem="anD-u5-EUd" secondAttribute="bottom" constant="20" id="RVt-Pb-Kee"/>
+                    <constraint firstItem="5Ib-am-qvl" firstAttribute="leading" secondItem="7HU-yB-e29" secondAttribute="leading" id="Vvh-E7-k0I"/>
                     <constraint firstAttribute="trailing" secondItem="T6y-kq-Rjm" secondAttribute="trailing" constant="20" id="hO3-EO-Bzb"/>
                     <constraint firstItem="7HU-yB-e29" firstAttribute="top" secondItem="T6y-kq-Rjm" secondAttribute="bottom" constant="12" id="m0e-lQ-T6J"/>
                     <constraint firstItem="7HU-yB-e29" firstAttribute="trailing" secondItem="T6y-kq-Rjm" secondAttribute="trailing" id="rjl-7F-Anh"/>
