@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     // sanitize application list
     NSMutableArray<NSString *> *sanitizedAppURLStrings = [NSMutableArray new];
     for (NSURL *appURL in appURLs) {
-        NSString *appURLString = appURL.absoluteString;
+        NSString *appURLString = appURL.absoluteString.stringByStandardizingPath;
         if (![self.dataSource containsObject:appURLString]) {
             [sanitizedAppURLStrings addObject:appURLString];
         }
@@ -177,7 +177,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 - (BOOL)panel:(id)sender shouldEnableURL:(NSURL *)url {
     // Disable apps that have been added to the ignored list.
     // Note that this might have slight performance issue if the list is long; but on average case this should be good enough.
-    if ([self.dataSource containsObject:url.absoluteString]) {
+    if ([self.dataSource containsObject:url.absoluteString.stringByStandardizingPath]) {
         return NO;
     }
     
