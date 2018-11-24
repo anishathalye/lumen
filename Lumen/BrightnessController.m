@@ -38,7 +38,7 @@
         self.model = [Model new];
         self.lastSet = -1; // this causes tick to notice that the brightness has changed significantly
                            // which causes it to create a new data point for the current screen
-        
+
         self.ignoredApplications = [[NSUserDefaults standardUserDefaults] objectForKey:DEFAULTS_IGNORE_LIST] ?: @[];
         self.lastActiveAppURLString = @"";
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -79,7 +79,7 @@
         NSString *bundleURLString = [NSBundle mainBundle].bundleURL.absoluteString.stringByStandardizingPath;
         NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
         NSString *activeAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
-        
+
         if ([activeAppURLString isEqualToString:bundleURLString]) {
             // for better experience, skip this method when Lumen is opened on top of an ignored application.
             if ([self.ignoredApplications containsObject:self.lastActiveAppURLString]) {
@@ -89,13 +89,13 @@
             // store the last active application URL (except Lumen.app itself).
             self.lastActiveAppURLString = activeAppURLString;
         }
-        
+
         // ignore if the current active app is listed in the ignored list.
         if ([self.ignoredApplications containsObject:activeAppURLString]) {
             return;
         }
     }
-    
+
     // get screen content lightness
     CGImageRef contents = CGDisplayCreateImage(kCGDirectMainDisplay);
     if (!contents) {
@@ -192,12 +192,12 @@
 
 - (void)ignoreListChanged:(NSNotification *)notification {
     self.updatingIgnoreList = YES;
-    
+
     NSArray<NSString *> *newIgnoreList = notification.userInfo[@"updatedList"];
     if (newIgnoreList) {
         self.ignoredApplications = newIgnoreList;
     }
-    
+
     self.updatingIgnoreList = NO;
 }
 

@@ -33,11 +33,11 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.allowsMultipleSelection = YES;
-    
+
     // fetch persisted app URLs from the user defaults, and validate them to remove renamed/uninstalled apps.
     NSArray<NSString *> *persistedAppURLStrings = [self.userDefaults arrayForKey:DEFAULTS_IGNORE_LIST] ?: @[];
     self.dataSource = [self getValidatedAppURLStrings:persistedAppURLStrings].mutableCopy;
-    
+
     [self reloadTable];
     [self.segmentedControl setEnabled:NO forSegment:(NSInteger)IgnoreListSegmentActionRemove];
 }
@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     if (!_userDefaults) {
         _userDefaults = [NSUserDefaults standardUserDefaults];
     }
-    
+
     return _userDefaults;
 }
 
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
             [validatedURLStrings removeObject:appURLString];
         }
     }
-    
+
     return validatedURLStrings;
 }
 
@@ -94,11 +94,11 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     panel.allowedFileTypes = @[@"app"];
     panel.allowsMultipleSelection = YES;
     panel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationDirectory inDomains:NSLocalDomainMask].firstObject;
-    
+
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
         if (result == NSModalResponseOK) {
             __block NSArray *selectedURLs = panel.URLs;
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self addIgnoredApplications:selectedURLs];
                 [self reloadTable];
@@ -112,17 +112,17 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     if (selectedIndexes.count <= 0) {
         return;
     }
-    
+
     // reset selections
     [self.tableView deselectAll:nil];
-    
+
     [self removeApplicationsAtIndexes:selectedIndexes];
     [self reloadTable];
 }
 
 - (void)addIgnoredApplications:(nonnull NSArray<NSURL *> *)appURLs {
     NSParameterAssert(appURLs);
-    
+
     // sanitize application list
     NSMutableArray<NSString *> *sanitizedAppURLStrings = [NSMutableArray new];
     for (NSURL *appURL in appURLs) {
@@ -131,24 +131,24 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
             [sanitizedAppURLStrings addObject:appURLString];
         }
     }
-    
+
     if (sanitizedAppURLStrings.count == 0) {
         return;
     }
-    
+
     [self.dataSource addObjectsFromArray:sanitizedAppURLStrings];
     [self persistIgnoreListState];
 }
 
 - (void)removeApplicationsAtIndexes:(nonnull NSIndexSet *)indexSet {
     NSParameterAssert(indexSet);
-    
+
     // validate index validity.
     // index sets are sorted ranges, so the last index of the indexSet has to be lower than the number of elements in dataSource.
     if (indexSet.lastIndex >= self.dataSource.count) {
         return;
     }
-    
+
     [self.dataSource removeObjectsAtIndexes:indexSet];
     [self persistIgnoreListState];
 }
@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 - (void)reloadTable {
     self.emptyStateView.hidden = (self.dataSource.count > 0);
     [self.window layoutIfNeeded];
-    
+
     [self.tableView reloadData];
 }
 
@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     if ([self.dataSource containsObject:url.absoluteString.stringByStandardizingPath]) {
         return NO;
     }
-    
+
     return YES;
 }
 
@@ -190,7 +190,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
         cell = [[NSTableCellView alloc] init];
         cell.identifier = @"cell";
     }
-    
+
     NSURL *url = [NSURL URLWithString:self.dataSource[row]];
     NSImage *img = [[NSWorkspace sharedWorkspace] iconForFile:url.path];
     cell.imageView.image = img;

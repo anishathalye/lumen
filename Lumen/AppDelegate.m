@@ -62,7 +62,7 @@
 
 - (IBAction)menuActionIgnoreList:(id)sender {
     [NSApp activateIgnoringOtherApps:YES];
-    
+
     if (self.ignoreListWC) {
         // refocus if the ignore list window is still around.
         [self.ignoreListWC.window orderFrontRegardless];
