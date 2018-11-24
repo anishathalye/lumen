@@ -1,10 +1,5 @@
-//
-//  IgnoreListWindowController.h
-//  Lumen
-//
-//  Created by David Christiandy on 28/10/17.
-//  Copyright © 2017 Anish Athalye. All rights reserved.
-//
+// Copyright (c) 2015-2017 Anish Athalye (me@anishathalye.com)
+// Released under GPLv3. See the included LICENSE.txt for details
 
 #import <Cocoa/Cocoa.h>
 
