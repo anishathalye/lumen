@@ -76,11 +76,11 @@
 - (void)tick:(NSTimer *)timer {
     // do nothing if the frontmost application is in ignored list.
     if (!self.updatingIgnoreList) {
-        NSString *bundleURLString = [NSBundle mainBundle].bundleURL.absoluteString.stringByStandardizingPath;
+        NSString *lumenBundleString = [NSBundle mainBundle].bundleURL.absoluteString.stringByStandardizingPath;
         NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
         NSString *activeAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
 
-        if ([activeAppURLString isEqualToString:bundleURLString]) {
+        if ([activeAppURLString isEqualToString:lumenBundleString]) {
             // for better experience, skip this method when Lumen is opened on top of an ignored application.
             if ([self.ignoredApplications containsObject:self.lastActiveAppURLString]) {
                 return;
