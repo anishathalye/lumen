@@ -2,8 +2,8 @@
 // Released under GPLv3. See the included LICENSE.txt for details
 
 #import "IgnoreListWindowController.h"
+#import "IgnoreListController.h"
 #import "NSArray+Functional.h"
-#import "Constants.h"
 
 typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     IgnoreListSegmentActionAdd,
@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 @interface IgnoreListWindowController () <NSTableViewDelegate, NSTableViewDataSource, NSOpenSavePanelDelegate>
 
 @property (weak) IBOutlet NSTableView *tableView;
-@property (strong, nonatomic) NSMutableArray<NSString *> *dataSource;
+@property (strong, nonatomic) NSArray<NSString *> *dataSource;
+@property (strong, nonatomic) IgnoreListController *ignoreList;
 @property (weak) IBOutlet NSSegmentedControl *segmentedControl;
 @property (weak) IBOutlet NSView *emptyStateView;
 @property (strong, nonatomic) NSUserDefaults *userDefaults; // lazy var
@@ -35,8 +36,8 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     self.tableView.allowsMultipleSelection = YES;
 
     // fetch persisted app URLs from the user defaults, and validate them to remove renamed/uninstalled apps.
-    NSArray<NSString *> *persistedAppURLStrings = [self.userDefaults arrayForKey:DEFAULTS_IGNORE_LIST] ?: @[];
-    self.dataSource = [self getValidatedAppURLStrings:persistedAppURLStrings].mutableCopy;
+    self.ignoreList = [[IgnoreListController alloc] init];
+    self.dataSource = [self.ignoreList ignoredURLStrings];
 
     [self reloadTable];
     [self.segmentedControl setEnabled:NO forSegment:(NSInteger)IgnoreListSegmentActionRemove];
@@ -72,20 +73,6 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
 }
 
 #pragma mark - Private Methods
-
-// remove apps that have been renamed and/or uninstalled based on the given app URL list.
-- (NSArray<NSString *> *)getValidatedAppURLStrings:(NSArray<NSString *> *)appURLStrings {
-    NSMutableArray<NSString *> *validatedURLStrings = appURLStrings.mutableCopy;
-
-    for (NSString *appURLString in appURLStrings) {
-        NSURL *appURL = [NSURL URLWithString:appURLString];
-        if (![appURL checkResourceIsReachableAndReturnError:nil]) {
-            [validatedURLStrings removeObject:appURLString];
-        }
-    }
-
-    return validatedURLStrings;
-}
 
 - (void)showAddApplicationPanel {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -124,20 +111,14 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     NSParameterAssert(appURLs);
 
     // sanitize application list
-    NSMutableArray<NSString *> *sanitizedAppURLStrings = [NSMutableArray new];
+    NSMutableArray<NSString *> *mappedURLStrings = [NSMutableArray new];
     for (NSURL *appURL in appURLs) {
         NSString *appURLString = appURL.absoluteString.stringByStandardizingPath;
-        if (![self.dataSource containsObject:appURLString]) {
-            [sanitizedAppURLStrings addObject:appURLString];
-        }
+        [mappedURLStrings addObject:appURLString];
     }
 
-    if (sanitizedAppURLStrings.count == 0) {
-        return;
-    }
-
-    [self.dataSource addObjectsFromArray:sanitizedAppURLStrings];
-    [self persistIgnoreListState];
+    [self.ignoreList ignoreURLStringsInArray:mappedURLStrings];
+    [self reloadDataSource];
 }
 
 - (void)removeApplicationsAtIndexes:(nonnull NSIndexSet *)indexSet {
@@ -149,18 +130,17 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
         return;
     }
 
-    [self.dataSource removeObjectsAtIndexes:indexSet];
-    [self persistIgnoreListState];
+    // get objects from indexSet
+    NSArray<NSString *> *objectsToRemove = [self.dataSource objectsAtIndexes:indexSet];
+    if (objectsToRemove.count > 0) {
+        [self.ignoreList removeURLStringsInArray:objectsToRemove];
+        [self reloadDataSource];
+    }
 }
 
-- (void)persistIgnoreListState {
-    // persist the latest changes to user defaults.
-    NSArray<NSString *> *dataSourceCopy = self.dataSource.copy;
-    [self.userDefaults setObject:dataSourceCopy forKey:DEFAULTS_IGNORE_LIST];
-    [self.userDefaults synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_IGNORE_LIST_CHANGED
-                                                        object:self
-                                                      userInfo:@{ @"updatedList": dataSourceCopy }];
+- (void)reloadDataSource {
+    self.dataSource = [self.ignoreList ignoredURLStrings].mutableCopy;
+    [self reloadTable];
 }
 
 - (void)reloadTable {
