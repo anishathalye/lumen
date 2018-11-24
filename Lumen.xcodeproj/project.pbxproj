@@ -99,7 +99,6 @@
 		F802B9E41AD81FB700FCFD65 /* Lumen */ = {
 			isa = PBXGroup;
 			children = (
-				FE621B861FA495CA001DCE64 /* Ignore List */,
 				F802B9E71AD81FB700FCFD65 /* AppDelegate.h */,
 				F802B9E81AD81FB700FCFD65 /* AppDelegate.m */,
 				F825A7A71E6B984300106611 /* stats.m */,
@@ -112,6 +111,9 @@
 				F80722851E6BD17F000C3ECE /* NSArray+Functional.m */,
 				F83E30F41AD823640098C5CC /* Constants.h */,
 				F83E30F91AD836F10098C5CC /* util.c */,
+				FE621B811FA495BB001DCE64 /* IgnoreListWindowController.h */,
+				FE621B821FA495BB001DCE64 /* IgnoreListWindowController.m */,
+				FE621B831FA495BB001DCE64 /* IgnoreListWindowController.xib */,
 				F83E30FA1AD836F10098C5CC /* util.h */,
 				F802B9EC1AD81FB700FCFD65 /* Images.xcassets */,
 				F802B9EE1AD81FB700FCFD65 /* MainMenu.xib */,
@@ -145,16 +147,6 @@
 				F802B9FA1AD81FB700FCFD65 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		FE621B861FA495CA001DCE64 /* Ignore List */ = {
-			isa = PBXGroup;
-			children = (
-				FE621B811FA495BB001DCE64 /* IgnoreListWindowController.h */,
-				FE621B821FA495BB001DCE64 /* IgnoreListWindowController.m */,
-				FE621B831FA495BB001DCE64 /* IgnoreListWindowController.xib */,
-			);
-			path = "Ignore List";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
