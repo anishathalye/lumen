@@ -6,14 +6,14 @@
 #import "Constants.h"
 
 // get serial number
-NSString *get_uuid();
+NSString *get_uuid(void);
 
 // get an anonymous identifier based on the UUID
 //
 // returns SHA256(UUID + salt)
 // given that the UUID is pretty high entropy, this should be reasonable
 // as a unique anonymous identifier
-NSString *get_anonymous_identifier();
+NSString *get_anonymous_identifier(void);
 
 NSString *data_to_hex(NSData *data);
 
