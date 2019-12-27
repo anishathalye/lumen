@@ -70,6 +70,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
             [self removeSelectedApplication];
             break;
     }
+    [self.segmentedControl setSelected:NO forSegment:self.segmentedControl.selectedSegment];
 }
 
 #pragma mark - Private Methods
