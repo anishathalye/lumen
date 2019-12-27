@@ -2,17 +2,36 @@
 // Released under GPLv3. See the included LICENSE.txt for details
 
 #import "BrightnessController.h"
+#import "IgnoreListController.h"
 #import "Model.h"
 #import "Constants.h"
 #import "util.h"
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <ApplicationServices/ApplicationServices.h>
+#import <AppKit/AppKit.h>
 
 @interface BrightnessController ()
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) Model *model;
-@property float lastSet;
+@property (nonatomic, assign) float lastSet;
+@property (nonatomic, assign) BOOL noticed;
+@property (nonatomic, assign) float lastNoticed;
+
+/**
+ Flags whether ignore observeOutput:forInput: due to brightness changes in ignored apps.
+ */
+@property (nonatomic, assign) BOOL shouldIgnoreOutput;
+
+/**
+ Maintains the list of ignored applications.
+ */
+@property (nonatomic, strong) IgnoreListController *ignoreList;
+
+/**
+ Maintains the last frontmost application (other than Lumen).
+ */
+@property (nonatomic, strong) NSString *lastActiveAppURLString;
 
 - (void)tick:(NSTimer *)timer;
 
@@ -34,6 +53,11 @@
         self.model = [Model new];
         self.lastSet = -1; // this causes tick to notice that the brightness has changed significantly
                            // which causes it to create a new data point for the current screen
+        self.noticed = NO;
+        self.lastNoticed = 0;
+
+        self.ignoreList = [[IgnoreListController alloc] init];
+        self.lastActiveAppURLString = @"";
     }
     return self;
 }
@@ -58,7 +82,55 @@
     self.timer = nil;
 }
 
+- (BOOL)checkIgnoreList {
+    // do nothing if the frontmost application is in ignored list.
+    NSString *lumenBundleString = [NSBundle mainBundle].bundleURL.absoluteString.stringByStandardizingPath;
+    NSRunningApplication *activeApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
+    NSString *activeAppURLString = activeApplication.bundleURL.absoluteString.stringByStandardizingPath;
+    BOOL isLumenActive = NO;
+    BOOL skip = NO;
+
+    // for better experience, skip when Lumen is opened on top of an ignored application.
+    if ([activeAppURLString isEqualToString:lumenBundleString]) {
+        isLumenActive = YES;
+        if ([self.ignoreList containsURLString:self.lastActiveAppURLString]) {
+            return YES;
+        }
+    }
+
+    // ignore if the current active app is listed in the ignored list.
+    if ([self.ignoreList containsURLString:activeAppURLString]) {
+        // any brightness adjustments made by user or Lumen should not be observed, in order to not impact all other non-ignored apps.
+        self.shouldIgnoreOutput = YES;
+
+        // update preferred brightness for ignored applications, only if it's certain that the brightness is changed manually by the user.
+        float preferredBrightness = [self.ignoreList preferredBrightnessForURLString:activeAppURLString].floatValue;
+        if ([activeAppURLString isEqualToString:self.lastActiveAppURLString]) {
+            float currentBrightness = [self getBrightness];
+            if (fabs(currentBrightness - preferredBrightness) > CHANGE_NOTICE) {
+                [self.ignoreList setPreferredBrightness:@(currentBrightness) forURLString:activeAppURLString];
+            }
+        } else if (preferredBrightness > -1) {
+            // update the brightness, only if it has non-default value.
+            [self setBrightness:preferredBrightness];
+        }
+
+        skip = YES;
+    }
+
+    // store the last active application URL (except Lumen.app itself).
+    if (!isLumenActive) {
+        self.lastActiveAppURLString = activeAppURLString;
+    }
+
+    return skip;
+}
+
 - (void)tick:(NSTimer *)timer {
+    if ([self checkIgnoreList]) {
+        return;
+    }
+
     // get screen content lightness
     CGImageRef contents = CGDisplayCreateImage(kCGDirectMainDisplay);
     if (!contents) {
@@ -69,21 +141,23 @@
 
 
     // check if backlight has been manually changed
-    static bool noticed = false;
-    static float lastNoticed = 0;
     float setPoint = [self getBrightness];
-    if (noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE) {
-        if (!noticed) {
-            noticed = true;
-            lastNoticed = setPoint;
+    if (self.noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE) {
+        if (!self.noticed) {
+            self.noticed = YES;
+            self.lastNoticed = setPoint;
             return; // wait till next tick to see if it's still changing
         }
-        if (fabsf(setPoint - lastNoticed) > CHANGE_NOTICE) {
-            lastNoticed = setPoint;
+        if (fabsf(setPoint - self.lastNoticed) > CHANGE_NOTICE) {
+            self.lastNoticed = setPoint;
             return; // it's still changing
+        } else if (self.shouldIgnoreOutput) {
+            // the brightness difference is due to adjusting automatically to preferred brightness value.
+            // reset and fall through.
+            self.shouldIgnoreOutput = NO;
         } else {
             [self.model observeOutput:setPoint forInput:lightness];
-            noticed = false;
+            self.noticed = NO;
             // don't return, fall through and evaluate model here
         }
     }
