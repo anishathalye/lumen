@@ -52,6 +52,8 @@ Feature requests, bug reports, and pull requests are all appreciated.
   implementation of Lumen written in **Node.js**
 * [meh/dux](https://github.com/meh/dux) - a **Linux** implementation of Lumen
   (with some extra features) written in **Rust**
+* [maximbaz/wluma](https://github.com/maximbaz/wluma) - a **Linux** implementation of Lumen
+  (with some extra features) written in **C**
 * [autolume/autolux](https://github.com/autolume/autolux) - a **Linux**
   implementation of Lumen written in **Python**
 * [AlaaAlShammaa/Luminance](https://github.com/AlaaAlShammaa/Luminance) - a
