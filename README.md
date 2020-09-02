@@ -68,6 +68,6 @@ Copyright (c) 2015-2019 Anish Athalye. Released under GPLv3. See
 
 [demo]: assets/demo.gif
 [cask]: https://caskroom.github.io/
-[opening-unsigned]: https://support.apple.com/kb/ph14369
+[opening-unsigned]: https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac
 [releases]: https://github.com/anishathalye/lumen/releases
 [license]: LICENSE.txt
