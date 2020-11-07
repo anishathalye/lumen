@@ -4,7 +4,6 @@
 #ifndef Lumen_Constants_h
 #define Lumen_Constants_h
 
-#define MENU_SYMBOL (@"\u262f")
 #define STOP (@"Stop")
 #define START (@"Start")
 
