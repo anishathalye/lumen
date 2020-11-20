@@ -7,6 +7,9 @@
 #define STOP (@"Stop")
 #define START (@"Start")
 
+#define START_EXPERIMENTAL (@"Use experimental API")
+#define STOP_EXPERIMENTAL (@"Use standard API")
+
 #define TELEMETRY_URL (@"https://telemetry.anish.io/api/v1/submit")
 #define TELEMETRY_IDENTIFIER (@"lumen-boot")
 #define TELEMETRY_RETRIES 5

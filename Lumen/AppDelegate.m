@@ -11,6 +11,7 @@
 
 @property (strong, nonatomic) IBOutlet NSMenu *statusMenu;
 @property (strong, nonatomic) IBOutlet NSMenuItem *toggle;
+@property (strong, nonatomic) IBOutlet NSMenuItem *experimental;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) BrightnessController *brightnessController;
 @property (nonatomic, strong) NSTimer *statsTimer;
@@ -29,6 +30,7 @@
     self.brightnessController = [BrightnessController new];
     [self.brightnessController start];
     [self.toggle setTitle:STOP];
+    [self.experimental setTitle:START_EXPERIMENTAL];
 
     send_stats(TELEMETRY_RETRIES);
     self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
@@ -57,6 +59,16 @@
     } else {
         [self.brightnessController start];
         [self.toggle setTitle:STOP];
+    }
+}
+
+- (IBAction)experimentalModeToggle:(id)sender {
+    if (self.brightnessController.isUsingNewAPI) {
+        [self.brightnessController toggleExperimentalMode];
+        [self.experimental setTitle:START_EXPERIMENTAL];
+    } else {
+        [self.brightnessController toggleExperimentalMode];
+        [self.experimental setTitle:STOP_EXPERIMENTAL];
     }
 }
 

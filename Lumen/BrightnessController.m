@@ -17,7 +17,7 @@
 @property (nonatomic, assign) float lastSet;
 @property (nonatomic, assign) BOOL noticed;
 @property (nonatomic, assign) float lastNoticed;
-@property (nonatomic, assign) BOOL shouldUseNewApi;
+@property (nonatomic, assign) BOOL isUsingNewAPI;
 
 /**
  Flags whether ignore observeOutput:forInput: due to brightness changes in ignored apps.
@@ -60,13 +60,17 @@
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
 
-        self.shouldUseNewApi = true;
+        self.isUsingNewAPI = false;
     }
     return self;
 }
 
 - (BOOL)isRunning {
     return self.timer && [self.timer isValid];
+}
+
+- (void)toggleExperimentalMode {
+    self.isUsingNewAPI = !self.isUsingNewAPI;
 }
 
 - (void)start {
@@ -215,7 +219,7 @@
 
 - (float)getBrightness {
     float level = 1.0f;
-    if (self.shouldUseNewApi) {
+    if (self.isUsingNewAPI) {
         level = [self getBrightessNewAPI];
     } else {
         io_iterator_t iterator;
@@ -267,7 +271,7 @@
 }
 
 - (void)setBrightness:(float)level {
-    if (self.shouldUseNewApi) {
+    if (self.isUsingNewAPI) {
         [self setBrightnessNewAPI:level];
     } else {
         io_iterator_t iterator;

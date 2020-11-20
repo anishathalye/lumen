@@ -6,8 +6,10 @@
 @interface BrightnessController : NSObject
 
 @property (nonatomic, readonly) BOOL isRunning;
+@property (nonatomic, readonly) BOOL isUsingNewAPI;
 
 - (void)start;
 - (void)stop;
+- (void)toggleExperimentalMode;
 
 @end
