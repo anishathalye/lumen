@@ -17,6 +17,7 @@
 @property (nonatomic, assign) float lastSet;
 @property (nonatomic, assign) BOOL noticed;
 @property (nonatomic, assign) float lastNoticed;
+@property (nonatomic, assign) BOOL shouldUseNewApi;
 
 /**
  Flags whether ignore observeOutput:forInput: due to brightness changes in ignored apps.
@@ -58,6 +59,8 @@
 
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
+
+        self.shouldUseNewApi = false;
     }
     return self;
 }
@@ -194,32 +197,115 @@
     return lightness;
 }
 
+- (float)getBrightessNewAPI {
+    float level = 1.0f;
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/Frameworks/CoreDisplay.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (coreDisplayBundle) {
+        typedef double (*getBrightnessFunctionPointer)(UInt32);
+        getBrightnessFunctionPointer getBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_GetUserBrightness"));
+
+        if (getBrightnessWithCoreDisplayAPI == NULL) {
+            NSLog(@"Error: Null pointer!");
+        } else {
+            level = (float) getBrightnessWithCoreDisplayAPI(0);
+            if (self.lastSet != level) {
+                NSLog(@"Got new: %f, self.lastSet = %f", level, self.lastSet);
+            }
+        }
+    } else {
+        NSLog(@"Failed!");
+    }
+    return level;
+}
+
 - (float)getBrightness {
     float level = 1.0f;
-    io_iterator_t iterator;
-    kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                                        IOServiceMatching("IODisplayConnect"),
-                                                        &iterator);
-    if (result == kIOReturnSuccess) {
-        io_object_t service;
-        while ((service = IOIteratorNext(iterator))) {
-            IODisplayGetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), &level);
-            IOObjectRelease(service);
+    if (self.shouldUseNewApi) {
+        level = [self getBrightessNewAPI];
+    } else {
+        io_iterator_t iterator;
+        kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                                            IOServiceMatching("IODisplayConnect"),
+                                                            &iterator);
+        if (result == kIOReturnSuccess) {
+            io_object_t service;
+            while ((service = IOIteratorNext(iterator))) {
+                IODisplayGetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), &level);
+                IOObjectRelease(service);
+            }
         }
     }
     return level;
 }
 
+- (void)notifySystemOfNewBrightness:(float)level {
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/PrivateFrameworks/DisplayServices.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (!coreDisplayBundle) {
+        NSLog(@"Failed!");
+        return;
+    }
+
+    typedef void (*notifyBrightnessFunctionPointer)(UInt32, double);
+    notifyBrightnessFunctionPointer notifyBrightnessWithDisplayServicesAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("DisplayServicesBrightnessChanged"));
+
+    if (notifyBrightnessWithDisplayServicesAPI == NULL) {
+        NSLog(@"Error: Null pointer!");
+    } else {
+        if (level == 0) {
+            NSLog(@"It wants to set to 0...");
+        } else {
+            if (self.lastSet != level) {
+                NSLog(@"NOTIFYING %f", level);
+            }
+            notifyBrightnessWithDisplayServicesAPI(0, (double) level);
+        }
+    }
+}
+
+- (void)setBrightnessNewAPI:(float)level {
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/Frameworks/CoreDisplay.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (!coreDisplayBundle) {
+        NSLog(@"Failed!");
+        return;
+    }
+
+    typedef void (*setBrightnessFunctionPointer)(UInt32, double);
+    setBrightnessFunctionPointer setBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_SetUserBrightness"));
+
+    if (setBrightnessWithCoreDisplayAPI == NULL) {
+        NSLog(@"Error: Null pointer!");
+    } else {
+        if (level == 0) {
+            NSLog(@"It wants to set to 0...");
+        } else {
+            if (self.lastSet != level) {
+                NSLog(@"Setting to %f, self.lastSet = %f", level, self.lastSet);
+            }
+            setBrightnessWithCoreDisplayAPI(0, (double) level);
+            [self notifySystemOfNewBrightness:level];
+        }
+    }
+}
 - (void)setBrightness:(float)level {
-    io_iterator_t iterator;
-    kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                                        IOServiceMatching("IODisplayConnect"),
-                                                        &iterator);
-    if (result == kIOReturnSuccess) {
-        io_object_t service;
-        while ((service = IOIteratorNext(iterator))) {
-            IODisplaySetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), level);
-            IOObjectRelease(service);
+    if (self.shouldUseNewApi) {
+        [self setBrightnessNewAPI:level];
+    } else {
+        io_iterator_t iterator;
+        kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                                            IOServiceMatching("IODisplayConnect"),
+                                                            &iterator);
+        if (result == kIOReturnSuccess) {
+            io_object_t service;
+            while ((service = IOIteratorNext(iterator))) {
+                IODisplaySetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), level);
+                IOObjectRelease(service);
+            }
         }
     }
     self.lastSet = [self getBrightness]; // not just storing `level` cause weird rounding stuff
