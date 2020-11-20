@@ -48,7 +48,7 @@
 
 @implementation BrightnessController
 
-- (id)init {
+- (id)init:(BOOL)shouldUseNewAPI {
     self = [super init];
     if (self) {
         self.model = [Model new];
@@ -60,7 +60,7 @@
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
 
-        self.isUsingNewAPI = false;
+        self.isUsingNewAPI = shouldUseNewAPI;
     }
     return self;
 }

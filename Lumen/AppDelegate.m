@@ -27,10 +27,19 @@
     [self.statusItem setMenu:self.statusMenu];
     [self.statusItem setHighlightMode:YES];
 
-    self.brightnessController = [BrightnessController new];
+    NSOperatingSystemVersion minimumOSVersionForExperimentalAPI = { .majorVersion = 10, .minorVersion = 12, .patchVersion = 4 };
+    BOOL shouldDefaultToExperimental = [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:minimumOSVersionForExperimentalAPI];
+
+    if (shouldDefaultToExperimental) {
+        [self.experimental setTitle:STOP_EXPERIMENTAL];
+    } else {
+        [self.experimental setTitle:START_EXPERIMENTAL];
+    }
+
+    self.brightnessController = [[BrightnessController alloc] init:shouldDefaultToExperimental];
     [self.brightnessController start];
     [self.toggle setTitle:STOP];
-    [self.experimental setTitle:START_EXPERIMENTAL];
+
 
     send_stats(TELEMETRY_RETRIES);
     self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
