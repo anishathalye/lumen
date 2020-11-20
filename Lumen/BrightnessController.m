@@ -60,7 +60,7 @@
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
 
-        self.shouldUseNewApi = false;
+        self.shouldUseNewApi = true;
     }
     return self;
 }
@@ -206,16 +206,9 @@
         typedef double (*getBrightnessFunctionPointer)(UInt32);
         getBrightnessFunctionPointer getBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_GetUserBrightness"));
 
-        if (getBrightnessWithCoreDisplayAPI == NULL) {
-            NSLog(@"Error: Null pointer!");
-        } else {
+        if (getBrightnessWithCoreDisplayAPI != NULL) {
             level = (float) getBrightnessWithCoreDisplayAPI(0);
-            if (self.lastSet != level) {
-                NSLog(@"Got new: %f, self.lastSet = %f", level, self.lastSet);
-            }
         }
-    } else {
-        NSLog(@"Failed!");
     }
     return level;
 }
@@ -245,24 +238,14 @@
     CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
 
     if (!coreDisplayBundle) {
-        NSLog(@"Failed!");
         return;
     }
 
     typedef void (*notifyBrightnessFunctionPointer)(UInt32, double);
     notifyBrightnessFunctionPointer notifyBrightnessWithDisplayServicesAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("DisplayServicesBrightnessChanged"));
 
-    if (notifyBrightnessWithDisplayServicesAPI == NULL) {
-        NSLog(@"Error: Null pointer!");
-    } else {
-        if (level == 0) {
-            NSLog(@"It wants to set to 0...");
-        } else {
-            if (self.lastSet != level) {
-                NSLog(@"NOTIFYING %f", level);
-            }
-            notifyBrightnessWithDisplayServicesAPI(0, (double) level);
-        }
+    if (notifyBrightnessWithDisplayServicesAPI != NULL) {
+        notifyBrightnessWithDisplayServicesAPI(0, (double) level);
     }
 }
 
@@ -271,27 +254,18 @@
     CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
 
     if (!coreDisplayBundle) {
-        NSLog(@"Failed!");
         return;
     }
 
     typedef void (*setBrightnessFunctionPointer)(UInt32, double);
     setBrightnessFunctionPointer setBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_SetUserBrightness"));
 
-    if (setBrightnessWithCoreDisplayAPI == NULL) {
-        NSLog(@"Error: Null pointer!");
-    } else {
-        if (level == 0) {
-            NSLog(@"It wants to set to 0...");
-        } else {
-            if (self.lastSet != level) {
-                NSLog(@"Setting to %f, self.lastSet = %f", level, self.lastSet);
-            }
-            setBrightnessWithCoreDisplayAPI(0, (double) level);
-            [self notifySystemOfNewBrightness:level];
-        }
+    if (setBrightnessWithCoreDisplayAPI != NULL) {
+        setBrightnessWithCoreDisplayAPI(0, (double) level);
+        [self notifySystemOfNewBrightness:level];
     }
 }
+
 - (void)setBrightness:(float)level {
     if (self.shouldUseNewApi) {
         [self setBrightnessNewAPI:level];
