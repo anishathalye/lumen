@@ -8,7 +8,7 @@
 #define START (@"Start")
 
 #define TELEMETRY_URL (@"https://telemetry.anish.io/api/v1/submit")
-#define TELEMETRY_IDENTIFIER (@"lumen-boot")
+#define TELEMETRY_IDENTIFIER (@"lumen-v1")
 #define TELEMETRY_RETRIES 5
 #define TELEMETRY_RETRY_DELAY 15 // seconds
 #define TELEMETRY_SALT (@"com.anishathalye.lumen")

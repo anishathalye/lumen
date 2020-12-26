@@ -22,7 +22,13 @@ void send_stats(unsigned int retries) {
     // so it's possible to count roughly how many people use Lumen
     // and how frequently they use it
 
-    NSDictionary *payload = @{@"id": get_anonymous_identifier()};
+#ifdef DEBUG
+    return;
+#endif
+
+    NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+    NSString *version = [info objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *payload = @{@"id": get_anonymous_identifier(), @"version": version};
 
     NSDictionary *data = @{@"identifier": TELEMETRY_IDENTIFIER, @"data": payload};
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:nil];
