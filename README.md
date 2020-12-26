@@ -26,19 +26,23 @@ The easiest way to install Lumen is to use [Homebrew Cask][cask]:
 brew cask install lumen
 ```
 
-Cask makes it easy to manage updates too.
+On macOS 11, you will need to grant screen recording permission to Lumen (it
+grabs the screen to see whether dark or light content is being displayed). You
+can grant the permission when it's first requested, or you can go to System
+Preferences > Security & Privacy > Privacy > Screen Recording and [check the
+box](https://raw.githubusercontent.com/anishathalye/lumen/doc/assets/screen-record.png)
+next to Lumen.
 
 If you prefer, you can manually install the binary. You can find pre-built
 binaries [here][releases].
 
-**As of now, releases are not signed with a developer key. To open unsigned
-applications, use [this method][opening-unsigned].**
-
-You can also download and compile the code yourself, if you feel like it.
+As of now, releases are not signed with a developer key. To open unsigned
+applications, use [this method][opening-unsigned].
 
 **Note: Lumen isn't supposed to work with auto brightness enabled, so be sure
 to disable the "automatically adjust brightness as ambient light changes"
-feature in System Preferences.**
+feature in System Preferences. Lumen also isn't compatible with f.lux or Night
+Shift, so it may not work properly while you are using those.**
 
 ## Contributing
 
