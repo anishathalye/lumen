@@ -16,6 +16,7 @@
             <connections>
                 <outlet property="statusMenu" destination="DlN-4E-L4J" id="LYg-5h-Wy8"/>
                 <outlet property="toggle" destination="dzr-55-Pnj" id="yIV-1F-kwr"/>
+                <outlet property="experimental" destination="kOW-Hy-RvD" id="experimental-outlet"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -31,6 +32,12 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="menuActionIgnoreList:" target="Voe-Tx-rLC" id="59a-Yc-Ohg"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Experimental" id="kOW-Hy-RvD">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="experimentalModeToggle:" target="Voe-Tx-rLC" id="experimental-mode-toggle-action"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="uRX-jK-9tO"/>

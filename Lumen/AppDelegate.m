@@ -11,6 +11,7 @@
 
 @property (strong, nonatomic) IBOutlet NSMenu *statusMenu;
 @property (strong, nonatomic) IBOutlet NSMenuItem *toggle;
+@property (strong, nonatomic) IBOutlet NSMenuItem *experimental;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) BrightnessController *brightnessController;
 @property (nonatomic, strong) NSTimer *statsTimer;
@@ -26,9 +27,19 @@
     [self.statusItem setMenu:self.statusMenu];
     [self.statusItem setHighlightMode:YES];
 
-    self.brightnessController = [BrightnessController new];
+    NSOperatingSystemVersion minimumOSVersionForExperimentalAPI = { .majorVersion = 10, .minorVersion = 12, .patchVersion = 4 };
+    BOOL shouldDefaultToExperimental = [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:minimumOSVersionForExperimentalAPI];
+
+    if (shouldDefaultToExperimental) {
+        [self.experimental setTitle:STOP_EXPERIMENTAL];
+    } else {
+        [self.experimental setTitle:START_EXPERIMENTAL];
+    }
+
+    self.brightnessController = [[BrightnessController alloc] init:shouldDefaultToExperimental];
     [self.brightnessController start];
     [self.toggle setTitle:STOP];
+
 
     send_stats(TELEMETRY_RETRIES);
     self.statsTimer = [NSTimer scheduledTimerWithTimeInterval:TELEMETRY_INTERVAL
@@ -57,6 +68,16 @@
     } else {
         [self.brightnessController start];
         [self.toggle setTitle:STOP];
+    }
+}
+
+- (IBAction)experimentalModeToggle:(id)sender {
+    if (self.brightnessController.isUsingNewAPI) {
+        [self.brightnessController toggleExperimentalMode];
+        [self.experimental setTitle:START_EXPERIMENTAL];
+    } else {
+        [self.brightnessController toggleExperimentalMode];
+        [self.experimental setTitle:STOP_EXPERIMENTAL];
     }
 }
 

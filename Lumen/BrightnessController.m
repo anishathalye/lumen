@@ -17,6 +17,7 @@
 @property (nonatomic, assign) float lastSet;
 @property (nonatomic, assign) BOOL noticed;
 @property (nonatomic, assign) float lastNoticed;
+@property (nonatomic, assign) BOOL isUsingNewAPI;
 
 /**
  Flags whether ignore observeOutput:forInput: due to brightness changes in ignored apps.
@@ -47,7 +48,7 @@
 
 @implementation BrightnessController
 
-- (id)init {
+- (id)init:(BOOL)shouldUseNewAPI {
     self = [super init];
     if (self) {
         self.model = [Model new];
@@ -58,12 +59,18 @@
 
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
+
+        self.isUsingNewAPI = shouldUseNewAPI;
     }
     return self;
 }
 
 - (BOOL)isRunning {
     return self.timer && [self.timer isValid];
+}
+
+- (void)toggleExperimentalMode {
+    self.isUsingNewAPI = !self.isUsingNewAPI;
 }
 
 - (void)start {
@@ -194,33 +201,90 @@
     return lightness;
 }
 
+- (float)getBrightessNewAPI {
+    float level = 1.0f;
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/Frameworks/CoreDisplay.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (coreDisplayBundle) {
+        typedef double (*getBrightnessFunctionPointer)(UInt32);
+        getBrightnessFunctionPointer getBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_GetUserBrightness"));
+
+        if (getBrightnessWithCoreDisplayAPI != NULL) {
+            level = (float) getBrightnessWithCoreDisplayAPI(0);
+        }
+    }
+    return level;
+}
+
 - (float)getBrightness {
     float level = 1.0f;
-    io_iterator_t iterator;
-    kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                                        IOServiceMatching("IODisplayConnect"),
-                                                        &iterator);
-    if (result == kIOReturnSuccess) {
-        io_object_t service;
-        while ((service = IOIteratorNext(iterator))) {
-            IODisplayGetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), &level);
-            IOObjectRelease(service);
+    if (self.isUsingNewAPI) {
+        level = [self getBrightessNewAPI];
+    } else {
+        io_iterator_t iterator;
+        kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                                            IOServiceMatching("IODisplayConnect"),
+                                                            &iterator);
+        if (result == kIOReturnSuccess) {
+            io_object_t service;
+            while ((service = IOIteratorNext(iterator))) {
+                IODisplayGetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), &level);
+                IOObjectRelease(service);
+            }
         }
         IOObjectRelease(iterator);
     }
     return level;
 }
 
+- (void)notifySystemOfNewBrightness:(float)level {
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/PrivateFrameworks/DisplayServices.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (!coreDisplayBundle) {
+        return;
+    }
+
+    typedef void (*notifyBrightnessFunctionPointer)(UInt32, double);
+    notifyBrightnessFunctionPointer notifyBrightnessWithDisplayServicesAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("DisplayServicesBrightnessChanged"));
+
+    if (notifyBrightnessWithDisplayServicesAPI != NULL) {
+        notifyBrightnessWithDisplayServicesAPI(0, (double) level);
+    }
+}
+
+- (void)setBrightnessNewAPI:(float)level {
+    CFURLRef coreDisplayPath = CFURLCreateWithString(kCFAllocatorDefault, CFSTR("/System/Library/Frameworks/CoreDisplay.framework"), nil);
+    CFBundleRef coreDisplayBundle = CFBundleCreate(kCFAllocatorDefault, coreDisplayPath);
+
+    if (!coreDisplayBundle) {
+        return;
+    }
+
+    typedef void (*setBrightnessFunctionPointer)(UInt32, double);
+    setBrightnessFunctionPointer setBrightnessWithCoreDisplayAPI = CFBundleGetFunctionPointerForName(coreDisplayBundle, CFSTR("CoreDisplay_Display_SetUserBrightness"));
+
+    if (setBrightnessWithCoreDisplayAPI != NULL) {
+        setBrightnessWithCoreDisplayAPI(0, (double) level);
+        [self notifySystemOfNewBrightness:level];
+    }
+}
+
 - (void)setBrightness:(float)level {
-    io_iterator_t iterator;
-    kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                                        IOServiceMatching("IODisplayConnect"),
-                                                        &iterator);
-    if (result == kIOReturnSuccess) {
-        io_object_t service;
-        while ((service = IOIteratorNext(iterator))) {
-            IODisplaySetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), level);
-            IOObjectRelease(service);
+    if (self.isUsingNewAPI) {
+        [self setBrightnessNewAPI:level];
+    } else {
+        io_iterator_t iterator;
+        kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                                            IOServiceMatching("IODisplayConnect"),
+                                                            &iterator);
+        if (result == kIOReturnSuccess) {
+            io_object_t service;
+            while ((service = IOIteratorNext(iterator))) {
+                IODisplaySetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), level);
+                IOObjectRelease(service);
+            }
         }
         IOObjectRelease(iterator);
     }
