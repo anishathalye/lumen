@@ -206,6 +206,7 @@
             IODisplayGetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), &level);
             IOObjectRelease(service);
         }
+        IOObjectRelease(iterator);
     }
     return level;
 }
@@ -221,6 +222,7 @@
             IODisplaySetFloatParameter(service, kNilOptions, CFSTR(kIODisplayBrightnessKey), level);
             IOObjectRelease(service);
         }
+        IOObjectRelease(iterator);
     }
     self.lastSet = [self getBrightness]; // not just storing `level` cause weird rounding stuff
 }
