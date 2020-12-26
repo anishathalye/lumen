@@ -23,7 +23,7 @@ With Lumen, it's perfect.
 The easiest way to install Lumen is to use [Homebrew Cask][cask]:
 
 ```bash
-brew cask install lumen
+brew install --cask lumen
 ```
 
 On macOS 11, you will need to grant screen recording permission to Lumen (it
