@@ -39,10 +39,16 @@ binaries [here][releases].
 As of now, releases are not signed with a developer key. To open unsigned
 applications, use [this method][opening-unsigned].
 
-**Note: Lumen isn't supposed to work with auto brightness enabled, so be sure
-to disable the "automatically adjust brightness as ambient light changes"
-feature in System Preferences. Lumen also isn't compatible with f.lux or Night
-Shift, so it may not work properly while you are using those.**
+## Notes
+
+- Lumen isn't supposed to work with auto brightness enabled, so be sure to
+  disable the "automatically adjust brightness as ambient light changes"
+  feature in System Preferences. Lumen also isn't compatible with f.lux or
+  Night Shift, so it may not work properly while you are using those.
+- Lumen does not natively support external monitors. If you want to control the
+  brightness of an external monitor with Lumen, you can use [Lunar] to [sync
+  your external monitor's brightness with your laptop
+  screen](https://github.com/anishathalye/lumen/issues/6#issuecomment-900464865).
 
 ## Contributing
 
@@ -75,3 +81,4 @@ Copyright (c) 2015-2019 Anish Athalye. Released under GPLv3. See
 [opening-unsigned]: https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac
 [releases]: https://github.com/anishathalye/lumen/releases
 [license]: LICENSE.txt
+[Lunar]: https://lunar.fyi/
