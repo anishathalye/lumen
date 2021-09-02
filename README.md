@@ -30,7 +30,7 @@ On macOS 11, you will need to grant screen recording permission to Lumen (it
 grabs the screen to see whether dark or light content is being displayed). You
 can grant the permission when it's first requested, or you can go to System
 Preferences > Security & Privacy > Privacy > Screen Recording and [check the
-box](https://raw.githubusercontent.com/anishathalye/lumen/doc/assets/screen-record.png)
+box](https://raw.githubusercontent.com/anishathalye/assets/master/lumen/screen-record.png)
 next to Lumen.
 
 If you prefer, you can manually install the binary. You can find pre-built
