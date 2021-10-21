@@ -23,7 +23,7 @@ With Lumen, it's perfect.
 The easiest way to install Lumen is to use [Homebrew Cask][cask]:
 
 ```bash
-brew install --cask lumen
+brew install --cask --no-quarantine lumen
 ```
 
 On macOS 11, you will need to grant screen recording permission to Lumen (it
@@ -37,7 +37,7 @@ If you prefer, you can manually install the binary. You can find pre-built
 binaries [here][releases].
 
 As of now, releases are not signed with a developer key. To open unsigned
-applications, use [this method][opening-unsigned].
+applications for the first time, use [this method][opening-unsigned].
 
 ## Notes
 
