@@ -73,7 +73,7 @@ Note: I haven't personally audited the code from these projects.
 
 ## License
 
-Copyright (c) 2015-2019 Anish Athalye. Released under GPLv3. See
+Copyright (c) Anish Athalye. Released under GPLv3. See
 [LICENSE.txt][license] for details.
 
 [demo]: assets/demo.gif

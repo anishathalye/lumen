@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2019 Anish Athalye (me@anishathalye.com)
+// Copyright (c) Anish Athalye (me@anishathalye.com)
 // Released under GPLv3. See the included LICENSE.txt for details
 
 #import <Foundation/Foundation.h>
