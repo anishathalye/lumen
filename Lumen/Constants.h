@@ -19,7 +19,9 @@
 
 #define NOTIFICATION_IGNORE_LIST_CHANGED (@"notification.ignoreListChanged")
 
-#define TICK_INTERVAL (0.5) // seconds
+#define LINEAR_SUBSAMPLE (16)
+#define FRAME_RATE (4) // int, fps
+#define DEBOUNCE_DELAY (1) // float, seconds
 #define MIN_X_SPACING (10.0) // absolute difference in L* coordinate
 #define CHANGE_NOTICE (0.01) // difference in screen brightness level
 #define DEFAULT_BRIGHTNESS (0.5)

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Gets the preferred brightness for a specific URL string.
- 
+
  If the app does not have a preferred brightness level yet, the method will return -1. Additionally, if the app is not actually ignored, `nil` will be returned.
 
  @param URLString The URL string of an ignored application

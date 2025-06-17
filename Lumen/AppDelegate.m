@@ -24,7 +24,6 @@
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 		self.statusItem.button.image = [NSImage imageNamed:@"StatusBarIcon"];
     [self.statusItem setMenu:self.statusMenu];
-    [self.statusItem setHighlightMode:YES];
 
     self.brightnessController = [BrightnessController new];
     [self.brightnessController start];

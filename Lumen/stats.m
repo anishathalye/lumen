@@ -50,7 +50,7 @@ void send_stats(unsigned int retries) {
     }] resume];
 }
 
-NSString *get_anonymous_identifier() {
+NSString *get_anonymous_identifier(void) {
     NSString *uuid = get_uuid();
     NSString *input = [uuid stringByAppendingString:TELEMETRY_SALT];
     NSData *inputData = [input dataUsingEncoding:NSUTF8StringEncoding];
@@ -60,8 +60,8 @@ NSString *get_anonymous_identifier() {
     return data_to_hex(outputData);
 }
 
-NSString *get_uuid() {
-    io_service_t platform_expert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
+NSString *get_uuid(void) {
+    io_service_t platform_expert = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
     if (!platform_expert) {
         return nil;
     }
@@ -72,7 +72,7 @@ NSString *get_uuid() {
         return nil;
     }
 
-    return (__bridge NSString *) serial;
+    return CFBridgingRelease(serial);
 }
 
 NSString *data_to_hex(NSData *data) {

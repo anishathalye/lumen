@@ -4,6 +4,7 @@
 #import "IgnoreListWindowController.h"
 #import "IgnoreListController.h"
 #import "NSArray+Functional.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     IgnoreListSegmentActionAdd,
@@ -79,7 +80,7 @@ typedef NS_ENUM(NSInteger, IgnoreListSegmentAction) {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.delegate = self;
     panel.prompt = @"Add to Ignore List";
-    panel.allowedFileTypes = @[@"app"];
+    panel.allowedContentTypes = @[UTTypeApplicationBundle];
     panel.allowsMultipleSelection = YES;
     panel.directoryURL = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationDirectory inDomains:NSLocalDomainMask].firstObject;
 

@@ -26,10 +26,10 @@ The easiest way to install Lumen is to use [Homebrew Cask][cask]:
 brew install --cask --no-quarantine lumen
 ```
 
-On macOS 11, you will need to grant screen recording permission to Lumen (it
-grabs the screen to see whether dark or light content is being displayed). You
-can grant the permission when it's first requested, or you can go to System
-Preferences > Security & Privacy > Privacy > Screen Recording and [check the
+You will need to grant screen recording permission to Lumen (it grabs the
+screen to see whether dark or light content is being displayed). You can grant
+the permission when it's first requested, or you can go to System Preferences >
+Privacy & Security > Screen & System Audio Recording and [check the
 box](https://raw.githubusercontent.com/anishathalye/assets/master/lumen/screen-record.png)
 next to Lumen.
 
@@ -42,12 +42,12 @@ applications for the first time, use [this method][opening-unsigned].
 ## Notes
 
 - Lumen isn't supposed to work with auto brightness enabled, so be sure to
-  disable the "automatically adjust brightness as ambient light changes"
-  feature in System Preferences. Lumen also isn't compatible with f.lux or
-  Night Shift, so it may not work properly while you are using those.
-- Lumen does not natively support external monitors. If you want to control the
-  brightness of an external monitor with Lumen, you can use [Lunar] to [sync
-  your external monitor's brightness with your laptop
+  disable the "Automatically adjust brightness" feature in System Preferences.
+  Lumen also isn't compatible with f.lux or Night Shift, so it may not work
+  properly while you are using those.
+- Lumen does not currently include native support for external monitors. If you
+  want to control the brightness of an external monitor with Lumen, you can use
+  [Lunar] to [sync your external monitor's brightness with your laptop
   screen](https://github.com/anishathalye/lumen/issues/6#issuecomment-900464865).
 
 ## Contributing
