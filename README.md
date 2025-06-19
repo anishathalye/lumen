@@ -20,7 +20,7 @@ With Lumen, it's perfect.
 
 ## Download
 
-The easiest way to install Lumen is to use [Homebrew Cask][cask]:
+The easiest way to install Lumen is to use [Homebrew][homebrew]:
 
 ```bash
 brew install --cask --no-quarantine lumen
@@ -77,7 +77,7 @@ Copyright (c) Anish Athalye. Released under GPLv3. See
 [LICENSE.txt][license] for details.
 
 [demo]: assets/demo.gif
-[cask]: https://caskroom.github.io/
+[homebrew]: https://brew.sh/
 [opening-unsigned]: https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac
 [releases]: https://github.com/anishathalye/lumen/releases
 [license]: LICENSE.txt
