@@ -14,16 +14,32 @@
 extern int DisplayServicesGetBrightness(CGDirectDisplayID display, float *brightness);
 extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightness);
 
+/*
+ BrightnessController architecture
+ --------------------------------
+ - ScreenCaptureKit callback path updates `latestLightness` from captured frames.
+ - A timer-driven control loop (`controlTick`) runs at BRIGHTNESS_SMOOTHING_INTERVAL
+   and applies brightness steps toward the model's predicted target.
+ - Decoupling control from frame delivery avoids stalls when frame callbacks pause
+   (for example, during static screens or UI tracking modes).
+ - Manual brightness changes are detected from hardware readback and fed back into
+   the model, while recent programmatic writes are filtered to avoid self-learning.
+ */
 @interface BrightnessController () <SCStreamDelegate, SCStreamOutput>
 
 @property (nonatomic, strong) SCStream *stream;
 @property (nonatomic, strong) Model *model;
+@property (nonatomic, strong) NSTimer *controlTimer;
 @property (nonatomic, assign) float lastSet; // display brightness read back from the OS, after setting it
 @property (nonatomic, assign) float lastAssigned; // last value of brightness that the controller has assigned to the display
+@property (nonatomic, assign) float targetBrightness; // target brightness predicted from screen content
+@property (nonatomic, assign) double latestLightness; // most recent measured screen lightness
+@property (nonatomic, assign) BOOL hasLatestLightness; // have we received any lightness sample yet
 @property (nonatomic, assign) BOOL noticed; // have we noticed the user manually changing the brightness
 @property (nonatomic, assign) float lastNoticed; // the value of the brightness last time we noticed the user manually change it
-@property (nonatomic, assign) NSTimeInterval lastAutoBrightnessTime; // the time the app set the brightness
 @property (nonatomic, assign) NSTimeInterval lastManualChangeTime; // the time the user last manually changed the brightness
+@property (nonatomic, assign) NSTimeInterval lastProgrammaticSetTime; // the time Lumen last issued a brightness write
+@property (nonatomic, assign) NSTimeInterval lastSmoothingTickTime; // the time the controller last updated the smoothing state
 
 /**
  Flags whether ignore observeOutput:forInput: due to brightness changes in ignored apps.
@@ -41,6 +57,7 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 @property (nonatomic, strong) NSString *lastActiveAppURLString;
 
 - (void)processLightness:(double)lightness;
+- (void)controlTick:(NSTimer *)timer;
 
 - (float)getBrightness;
 
@@ -59,10 +76,14 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
         self.lastSet = -1; // this causes tick to notice that the brightness has changed significantly
                            // which causes it to create a new data point for the current screen
         self.lastAssigned = -1;
+        self.targetBrightness = -1;
+        self.latestLightness = 0;
+        self.hasLatestLightness = NO;
         self.noticed = NO;
         self.lastNoticed = 0;
-        self.lastAutoBrightnessTime = 0;
         self.lastManualChangeTime = 0;
+        self.lastProgrammaticSetTime = 0;
+        self.lastSmoothingTickTime = 0;
 
         self.ignoreList = [[IgnoreListController alloc] init];
         self.lastActiveAppURLString = @"";
@@ -76,6 +97,26 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 
 - (void)start {
     [self stop];
+    self.lastAssigned = -1;
+    self.targetBrightness = -1;
+    self.hasLatestLightness = NO;
+    self.lastProgrammaticSetTime = 0;
+    self.lastSmoothingTickTime = 0;
+    // Keep control updates running in common run-loop modes so tracking UI (e.g. menu bar)
+    // does not pause brightness transitions.
+    self.controlTimer = [NSTimer timerWithTimeInterval:BRIGHTNESS_SMOOTHING_INTERVAL
+                                                 target:self
+                                               selector:@selector(controlTick:)
+                                               userInfo:nil
+                                                repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.controlTimer forMode:NSRunLoopCommonModes];
+
+    if (!CGPreflightScreenCaptureAccess()) {
+        if (!CGRequestScreenCaptureAccess()) {
+            NSLog(@"Screen Recording permission is required. Enable it in System Settings > Privacy & Security > Screen & System Audio Recording.");
+            return;
+        }
+    }
 
     [SCShareableContent getShareableContentWithCompletionHandler:^(SCShareableContent *content, NSError *error) {
         if (error) {
@@ -131,6 +172,11 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 }
 
 - (void)stop {
+    if (self.controlTimer) {
+        [self.controlTimer invalidate];
+        self.controlTimer = nil;
+    }
+
     if (self.stream) {
         [self.stream stopCaptureWithCompletionHandler:^(NSError *error) {
             if (error) {
@@ -188,9 +234,16 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 - (void)processLightness:(double)lightness {
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
 
-    // check if backlight has been manually changed
+    // Phase 1: observe potential user intent from hardware brightness readback.
     float setPoint = [self getBrightness];
-    if (self.noticed || fabsf(self.lastSet - setPoint) > CHANGE_NOTICE) {
+    BOOL changedBrightness = fabsf(self.lastSet - setPoint) > CHANGE_NOTICE;
+    BOOL likelyProgrammaticSettle = changedBrightness &&
+        (currentTime - self.lastProgrammaticSetTime) < PROGRAMMATIC_BRIGHTNESS_SETTLE_WINDOW;
+    if (likelyProgrammaticSettle) {
+        // Hardware readback can settle after a write; don't treat that as user intent.
+        self.lastSet = setPoint;
+        self.noticed = NO;
+    } else if (self.noticed || changedBrightness) {
         if (!self.noticed) {
             self.noticed = YES;
             self.lastNoticed = setPoint;
@@ -210,25 +263,66 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
         } else {
             [self.model observeOutput:setPoint forInput:lightness];
             self.noticed = NO;
+            self.lastSet = setPoint;
+            self.lastAssigned = setPoint;
+            self.targetBrightness = setPoint;
+            self.lastSmoothingTickTime = currentTime;
             // don't return, fall through and evaluate model here
         }
     }
 
-    // debounce automatic brightness adjustments
-    if (currentTime - self.lastAutoBrightnessTime < DEBOUNCE_DELAY) {
-        return;
+    // Phase 2: compute desired target from observed content lightness.
+    float target = [self.model predictFromInput:lightness];
+    target = fmaxf(0.0f, fminf(1.0f, target));
+    self.targetBrightness = target;
+
+    if (self.lastAssigned < 0) {
+        // Initialize the ramp from the current hardware brightness.
+        self.lastAssigned = setPoint;
     }
 
-    float brightness = [self.model predictFromInput:lightness];
+    if (self.lastSmoothingTickTime <= 0) {
+        self.lastSmoothingTickTime = currentTime;
+    }
 
-    if (brightness == self.lastAssigned) {
+    // Phase 3: apply a bounded eased step toward target.
+    NSTimeInterval elapsed = currentTime - self.lastSmoothingTickTime;
+    if (elapsed < BRIGHTNESS_SMOOTHING_INTERVAL) {
+        return;
+    }
+    self.lastSmoothingTickTime = currentTime;
+
+    float delta = self.targetBrightness - self.lastAssigned;
+    if (fabsf(delta) <= BRIGHTNESS_SNAP_THRESHOLD) {
         // no changes to make
+        self.lastAssigned = self.targetBrightness;
         return;
     }
 
-    [self setBrightness:brightness];
-    self.lastAssigned = brightness;
-    self.lastAutoBrightnessTime = currentTime;
+    float normalizedDistance = fminf(1.0f, fabsf(delta) / BRIGHTNESS_EASING_DISTANCE);
+    // Smoothstep easing: slower near target, faster when farther away.
+    float ease = normalizedDistance * normalizedDistance * (3.0f - 2.0f * normalizedDistance);
+    float speedFactor = BRIGHTNESS_EASING_MIN_FACTOR + (1.0f - BRIGHTNESS_EASING_MIN_FACTOR) * ease;
+    float maxStep = BRIGHTNESS_SMOOTHING_RATE * speedFactor * (float)elapsed;
+    float step = copysignf(fminf(fabsf(delta), maxStep), delta);
+    float nextBrightness = self.lastAssigned + step;
+    nextBrightness = fmaxf(0.0f, fminf(1.0f, nextBrightness));
+
+    [self setBrightness:nextBrightness];
+    self.lastAssigned = nextBrightness;
+}
+
+- (void)controlTick:(NSTimer *)timer {
+    if (!self.hasLatestLightness) {
+        // Wait until we have at least one measured lightness sample.
+        return;
+    }
+
+    if ([self checkIgnoreList]) {
+        return;
+    }
+
+    [self processLightness:self.latestLightness];
 }
 
 - (float)getBrightness {
@@ -238,7 +332,9 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 }
 
 - (void)setBrightness:(float)level {
-    DisplayServicesSetBrightness(kCGDirectMainDisplay, level);
+    float clamped = fmaxf(0.0f, fminf(1.0f, level));
+    DisplayServicesSetBrightness(kCGDirectMainDisplay, clamped);
+    self.lastProgrammaticSetTime = [NSDate timeIntervalSinceReferenceDate];
     self.lastSet = [self getBrightness]; // not just storing `level` cause weird rounding stuff
 }
 
@@ -301,15 +397,11 @@ extern int DisplayServicesSetBrightness(CGDirectDisplayID display, float brightn
 
         double lightness = [self computeLightnessFromSampleBuffer:sampleBuffer];
 
-        // Only process if we got a valid lightness value
+        // Store latest lightness only. The timer-driven control loop consumes this value,
+        // which keeps transitions smooth even when capture callbacks are bursty.
         if (lightness > 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self checkIgnoreList]) {
-                    return;
-                }
-
-                [self processLightness:lightness];
-            });
+            self.latestLightness = lightness;
+            self.hasLatestLightness = YES;
         }
     }
 }
