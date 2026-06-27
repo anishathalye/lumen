@@ -23,7 +23,7 @@ With Lumen, it's perfect.
 The easiest way to install Lumen is to use [Homebrew][homebrew]:
 
 ```bash
-brew install --cask --no-quarantine lumen
+brew install --cask anishathalye/tap/lumen
 ```
 
 You will need to grant screen recording permission to Lumen (it grabs the
