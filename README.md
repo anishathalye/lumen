@@ -54,6 +54,9 @@ applications for the first time, use [this method][opening-unsigned].
 
 Feature requests, bug reports, and pull requests are all appreciated.
 
+For implementation notes on brightness smoothing, easing, and learning behavior,
+see [docs/brightness-control.md](docs/brightness-control.md).
+
 ## Related Projects
 
 * [bencevans/lumenaire](https://github.com/bencevans/lumenaire) - a **cross
